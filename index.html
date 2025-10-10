@@ -24,11 +24,11 @@
         @keyframes fadeOutSplash {
             0% {
                 opacity: 1;
-                transform: rotate(0deg) scale(1);
+                transform: scale(1);
             }
             100% {
                 opacity: 0;
-                transform: rotate(45deg) scale(0);
+                transform: scale(2);
             }
         }
         #splash-screen {
@@ -37,14 +37,14 @@
         }
         #splash-logo {
             animation: fadeInLogo 1.2s cubic-bezier(0.76, 0, 0.24, 1) forwards;
-            animation-delay: 0.5s;
+            animation-delay: 0.7s;
         }
         
         /* --- Main Content Fade In --- */
         #content-wrapper {
             opacity: 0;
-            animation: fadeInMain 1s ease-in forwards;
-            animation-delay: 3.5s; /* Adjusted to start after splash screen ends */
+            animation: fadeInMain .5s ease-in forwards;
+            animation-delay: .1s;
         }
         @keyframes fadeInMain {
             from { opacity: 0; }
@@ -56,7 +56,7 @@
             position: absolute;
             inset: 0;
             opacity: 0;
-            transition: opacity 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+            transition: opacity 0.2s cubic-bezier(0.76, 0, 0.24, 1);
             pointer-events: none;
             display: flex;
             flex-direction: column;
@@ -68,13 +68,24 @@
 
         /* --- Navigation Menu --- */
         #nav-trigger {
-            transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.4s ease;
-            transform: rotate(45deg); /* Creates the diamond shape */
+            /*transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.4s ease;*/
+            transition: 0.4s ease;
+            transform: rotate(45deg);
         }
         #nav-trigger:hover {
-            transform: rotate(45deg) scale(1.1); /* Keep rotation on hover */
+            transform: rotate(-45deg) scale(1.1);
+            border-color: #ffffff;
         }
-        #nav-trigger img {
+
+        #inner-logo {
+            transition: 0.4s ease;
+        }
+
+        #nav-trigger:hover #inner-logo {
+            transform: rotate(90deg);
+        }
+
+        #inner-logo img {
             transform: rotate(-45deg); /* Counter-rotates the logo to be upright */
         }
 
@@ -84,7 +95,7 @@
         }
 
         #nav-overlay {
-            transition: opacity 0.4s ease;
+            transition: opacity 0.5s ease;
         }
         #nav-overlay.open {
             opacity: 1;
@@ -107,8 +118,8 @@
         #vertical-menu .menu-link {
             opacity: 0;
             transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease, color 0.2s ease-out;
-            transition-delay: 0.5s, 0.5s, 0s;
+            transition: opacity 0.5s ease, transform 0.5s ease, color 0.1s ease;
+            transition-delay: 0.5s;
             color: #6b7280; /* gray-500 */
         }
 
@@ -134,11 +145,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 50vw;
+            width: 50vw; /* Adjust size as needed */
             max-width: 500px;
             height: auto;
-            opacity: 0.1;
-            filter: invert(100%);
+            opacity: 0.1; /* Very faint */
+            filter: invert(100%); /* Ensure it's white against dark background */
             pointer-events: none;
             z-index: 0;
         }
@@ -158,28 +169,34 @@
         }
 
         .social-icon {
-            filter: invert(100%);
+            filter: invert(100%); /* Makes default icons white */
             transition: transform 0.2s ease, filter 0.2s ease;
         }
         .social-icon:hover {
             transform: translateY(-3px);
-            filter: invert(70%);
+            filter: invert(70%); /* Slightly less white on hover */
         }
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- Splash Screen --><div id="splash-screen" class="fixed inset-0 bg-black z-[100] flex items-center justify-center pointer-events-none">
-        <img id="splash-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAYFBMVEX///8AAADw8PDf39/m5ub6+vppaWmJiYn39/eysrJbW1uhoaHc3Nytra3MzMwhISHo6OhISEg7Ozt3d3dOTk4vLy+7u7tQUFAYGBhvb29gYGAzMzNKSkqWlpaAgIAdHR2nF52TAAADlklEQVR4nO2dW3LiMBCGAQuoBRW8CrK+/5seIKgKIbQ7jeR0zv1TpsT+gWTJJEkDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/V3B0cnl7eS2u6Wkzx/2eG4eTdHd1T2c2rYpGy9Z0VvM2z85v6TbTqH+V2xobNpu6eW/T+xDtJm3VbR9dEn8kdW//mE37t8Vv/2Zt69L6l1bUa/a9Xm3rElv3u7W9m2FftW6bW9M21j5K/vC6/ZtS2zbOfs/6t922NbZtW+0nK19u+5ZpS2rZtthO85fS0/Ztta2gbdtjO9tftr3atg2zbVvstH/Gtj3bNmRbtrf/Yds2zLbtwLb2t7ds2zBtW7Gtfbtt2wbYtmJbe9S2bYBtK7a1J23bBti2Ylt71LYtA2zbsK193LbtwG0rtbVHbdviwLYVt7X32rYlwLYVt7XnbdsSYFuJbe3Dtm0JsC3FtvZp25YAW1Lsat/StiXAthS72mdtWwJsSbGtfcu2JYAtCbm1X9q2JMCWEFv7lW1LAixJta2t25YAWlJs64O2LQE0pNjWl21bAmhIsW2dty0BoCDEtnbYtgSAghDb2jG2LQEghLAtnduWAAhCbGvb25YAABDa2sltSwAACLStbW9LAAAItK1tTwAA8F+Eba1lWwIA4L8KbWvrty0BAEBba1vbAgDgH2lbm98WAADeS9vazrYEAIC30ra23S0BAMAbaFtb2RYAAH6WtrWNbgkA4C9pW9s+WwIA4CtpW9veLQEAWElb2wZbAgCwira2jWwJAMCqaFvb/bYEAGAVbW2bbQkAwCra2vbZEgCAVbStrX9LAAAKbWv72RIAAF7StrZNLQEAWFdb25ZbAgCwrr2traYtAQCspW1tO1sCAKyjbW3HWwIA0ErbtnpLAAAaads2PSUAwE3adlu9JQDADdq2XU8JANBR27Z7SwCAjtm2XU8JANB527Z/SwCAzti2/UsAAM+0bfv0lAB4jm3b5ynBE+1b4BneG/sE7z1vjZ/HLe99m8F3G8B87Q3vfe+u43sN8J39gvd+uI7vNMC39gHe+x/X8T0GeEv/YL3fXcf3FOBt/YB3/+s6vpMAS2sPeO//Xcf3EsBabwHv/ed1fFMBVnoLeM+fr+O7CrDSW8B7/nYd31SAlN4C3vPX6/heAiz0FvCe/1zH9xFgoTeA9/zpOj4KAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD42/wFSx0Xp/Qz2ccAAAAASUVORK5CYII=" alt="QFC Logo" class="w-32 h-32 md:w-40 md:h-40 opacity-0 filter invert">
+    <!-- Splash Screen -->
+    <div id="splash-screen" class="fixed inset-0 bg-black z-[100] flex items-center justify-center pointer-events-none">
+        <img id="splash-logo" src="logo_black.png" alt="QFC Logo" class="w-32 h-32 md:w-40 md:h-40 opacity-0 filter invert">
     </div>
 
-    <!-- Navigation Trigger --><button id="nav-trigger" class="fixed top-6 left-6 md:top-8 md:left-8 z-[60] w-14 h-14 md:w-16 md:h-16 bg-black flex items-center justify-center border-2 border-gray-800 hover:border-white focus:outline-none focus:border-white">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAYFBMVEX///8AAADw8PDf39/m5ub6+vppaWmJiYn39/eysrJbW1uhoaHc3Nytra3MzMwhISHo6OhISEg7Ozt3d3dOTk4vLy+7u7tQUFAYGBhvb29gYGAzMzNKSkqWlpaAgIAdHR2nF52TAAADlklEQVR4nO2dW3LiMBCGAQuoBRW8CrK+/5seIKgKIbQ7jeR0zv1TpsT+gWTJJEkDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/V3B0cnl7eS2u6Wkzx/2eG4eTdHd1T2c2rYpGy9Z0VvM2z85v6TbTqH+V2xobNpu6eW/T+xDtJm3VbR9dEn8kdW//mE37t8Vv/2Zt69L6l1bUa/a9Xm3rElv3u7W9m2FftW6bW9M21j5K/vC6/ZtS2zbOfs/6t922NbZtW+0nK19u+5ZpS2rZtthO85fS0/Ztta2gbdtjO9tftr3atg2zbVvstH/Gtj3bNmRbtrf/Yds2zLbtwLb2t7ds2zBtW7Gtfbtt2wbYtmJbe9S2bYBtK7a1J23bBti2Ylt71LYtA2zbsK193LbtwG0rtbVHbdviwLYVt7X32rYlwLYVt7XnbdsSYFuJbe3Dtm0JsC3FtvZp25YAW1Lsat/StiXAthS72mdtWwJsSbGtfcu2JYAtCbm1X9q2JMCWEFv7lW1LAixJta2t25YAWlJs64O2LQE0pNjWl21bAmhIsW2dty0BoCDEtnbYtgSAghDb2jG2LQEghLAtnduWAAhCbGvb25YAABDa2sltSwAACLStbW9LAAAItK1tTwAA8F+Eba1lWwIA4L8KbWvrty0BAEBba1vbAgDgH2lbm98WAADeS9vazrYEAIC30ra23S0BAMAbaFtb2RYAAH6WtrWNbgkA4C9pW9s+WwIA4CtpW9veLQEAWElb2wZbAgCwira2jWwJAMCqaFvb/bYEAGAVbW2bbQkAwCra2vbZEgCAVbStrX9LAAAKbWv72RIAAF7StrZNLQEAWFdb25ZbAgCwrr2traYtAQCspW1tO1sCAKyjbW3HWwIA0ErbtnpLAAAaads2PSUAwE3adlu9JQDADdq2XU8JANBR27Z7SwCAjtm2XU8JANB527Z/SwCAzti2/UsAAM+0bfv0lAB4jm3b5ynBE+1b4BneG/sE7z1vjZ/HLe99m8F3G8B87Q3vfe+u43sN8J39gvd+uI7vNMC39gHe+x/X8T0GeEv/YL3fXcf3FOBt/YB3/+s6vpMAS2sPeO//Xcf3EsBabwHv/ed1fFMBVnoLeM+fr+O7CrDSW8B7/nYd31SAlN4C3vPX6/heAiz0FvCe/1zH9xFgoTeA9/zpOj4KAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD42/wFSx0Xp/Qz2ccAAAAASUVORK5CYII=" alt="QFC Logo Small" class="w-8 h-8 md:w-10 md:h-10 filter invert">
+    <!-- Navigation Trigger -->
+    <button id="nav-trigger" class="fixed top-6 left-6 md:top-8 md:left-8 z-[60] w-12 h-12 md:w-12 md:h-12 bg-black flex items-center justify-center border-2 border-gray-800 focus:outline-none">
+        <div id="inner-logo" class="w-full h-full items-center justify-center">
+            <img src="logo_black.png" alt="QFC Logo Small" class="w-12 h-12 filter invert">
+        </div>
     </button>
     
-    <!-- Navigation Overlay --><div id="nav-overlay" class="fixed inset-0 z-50 flex items-center justify-center opacity-0 pointer-events-none">
+    <!-- Navigation Overlay -->
+    <div id="nav-overlay" class="fixed inset-0 z-50 flex items-center justify-center opacity-0 pointer-events-none">
         <div id="expanding-bg"></div>
-        <!-- Faint Logo in Menu Background --><img id="menu-background-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAYFBMVEX///8AAADw8PDf39/m5ub6+vppaWmJiYn39/eysrJbW1uhoaHc3Nytra3MzMwhISHo6OhISEg7Ozt3d3dOTk4vLy+7u7tQUFAYGBhvb29gYGAzMzNKSkqWlpaAgIAdHR2nF52TAAADlklEQVR4nO2dW3LiMBCGAQuoBRW8CrK+/5seIKgKIbQ7jeR0zv1TpsT+gWTJJEkDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/V3B0cnl7eS2u6Wkzx/2eG4eTdHd1T2c2rYpGy9Z0VvM2z85v6TbTqH+V2xobNpu6eW/T+xDtJm3VbR9dEn8kdW//mE37t8Vv/2Zt69L6l1bUa/a9Xm3rElv3u7W9m2FftW6bW9M21j5K/vC6/ZtS2zbOfs/6t922NbZtW+0nK19u+5ZpS2rZtthO85fS0/Ztta2gbdtjO9tftr3atg2zbVvstH/Gtj3bNmRbtrf/Yds2zLbtwLb2t7ds2zBtW7Gtfbtt2wbYtmJbe9S2bYBtK7a1J23bBti2Ylt71LYtA2zbsK193LbtwG0rtbVHbdviwLYVt7X32rYlwLYVt7XnbdsSYFuJbe3Dtm0JsC3FtvZp25YAW1Lsat/StiXAthS72mdtWwJsSbGtfcu2JYAtCbm1X9q2JMCWEFv7lW1LAixJta2t25YAWlJs64O2LQE0pNjWl21bAmhIsW2dty0BoCDEtnbYtgSAghDb2jG2LQEghLAtnduWAAhCbGvb25YAABDa2sltSwAACLStbW9LAAAItK1tTwAA8F+Eba1lWwIA4L8KbWvrty0BAEBba1vbAgDgH2lbm98WAADeS9vazrYEAIC30ra23S0BAMAbaFtb2RYAAH6WtrWNbgkA4C9pW9s+WwIA4CtpW9veLQEAWElb2wZbAgCwira2jWwJAMCqaFvb/bYEAGAVbW2bbQkAwCra2vbZEgCAVbStrX9LAAAKbWv72RIAAF7StrZNLQEAWFdb25ZbAgCwrr2traYtAQCspW1tO1sCAKyjbW3HWwIA0ErbtnpLAAAaads2PSUAwE3adlu9JQDADdq2XU8JANBR27Z7SwCAjtm2XU8JANB527Z/SwCAzti2/UsAAM+0bfv0lAB4jm3b5ynBE+1b4BneG/sE7z1vjZ/HLe99m8F3G8B87Q3vfe+u43sN8J39gvd+uI7vNMC39gHe+x/X8T0GeEv/YL3fXcf3FOBt/YB3/+s6vpMAS2sPeO//Xcf3EsBabwHv/ed1fFMBVnoLeM+fr+O7CrDSW8B7/nYd31SAlN4C3vPX6/heAiz0FvCe/1zH9xFgoTeA9/zpOj4KAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD42/wFSx0Xp/Qz2ccAAAAASUVORK5CYII=" alt="QFC Logo Faint">
+        <!-- Faint Logo in Menu Background -->
+        <img id="menu-background-logo" src="logo_black.png" alt="QFC Logo Faint">
         <nav id="vertical-menu" class="relative z-10 flex flex-col items-center space-y-8 text-center">
             <a href="#" class="menu-link text-4xl font-bold" data-page="home">Home</a>
             <a href="#" class="menu-link text-4xl font-bold" data-page="about">About</a>
@@ -189,9 +206,11 @@
         </nav>
     </div>
 
-    <!-- Content Wrapper --><div id="content-wrapper" class="relative w-full h-screen">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="relative w-full h-screen">
         
-        <!-- Home Page --><div id="page-home" class="page active">
+        <!-- Home Page -->
+        <div id="page-home" class="page active">
             <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-center text-center pb-24">
                 <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter mb-4 leading-tight">
                     <span class="text-gray-100">Rutgers Quantitative Finance Club</span>
@@ -202,7 +221,8 @@
             </main>
         </div>
 
-        <!-- About Page --><div id="page-about" class="page">
+        <!-- About Page -->
+        <div id="page-about" class="page">
             <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-center pb-24">
                 <div class="section-card p-8 md:p-12 rounded-lg max-w-4xl w-full">
                     <h2 class="text-3xl md:text-4xl font-bold mb-6 tracking-tight">Our Mission</h2>
@@ -214,7 +234,8 @@
             </main>
         </div>
 
-        <!-- Team Page --><div id="page-team" class="page">
+        <!-- Team Page -->
+        <div id="page-team" class="page">
             <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-center pb-24">
                  <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center tracking-tight">Executive Board 2024-2025</h2>
                  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8">
@@ -231,7 +252,8 @@
             </main>
         </div>
 
-        <!-- Events Page --><div id="page-events" class="page">
+        <!-- Events Page -->
+        <div id="page-events" class="page">
              <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-center pb-24">
                  <div class="section-card p-8 md:p-12 rounded-lg max-w-4xl w-full">
                      <h2 class="text-3xl md:text-4xl font-bold mb-8 tracking-tight">Our Events</h2>
@@ -244,7 +266,8 @@
             </main>
         </div>
 
-        <!-- Join Us Page --><div id="page-join" class="page">
+        <!-- Join Us Page -->
+        <div id="page-join" class="page">
              <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-center text-center pb-24">
                  <h2 class="text-3xl md:text-4xl font-bold mb-4 tracking-tight">Become a Member</h2>
                 <p class="max-w-2xl mx-auto text-lg text-gray-400 mb-8">
@@ -256,7 +279,8 @@
             </main>
         </div>
 
-        <!-- Footer for all pages --><footer class="absolute bottom-0 left-0 right-0 py-4 bg-[#111111] border-t border-gray-800">
+        <!-- Footer for all pages -->
+        <footer class="absolute bottom-0 left-0 right-0 py-4 bg-[#0A0A0A]">
             <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-gray-500 text-sm order-2 md:order-1 mt-4 md:mt-0">&copy; 2025 Rutgers Quantitative Finance Club. All Rights Reserved.</p>
                 <div class="flex space-x-4 order-1 md:order-2">
@@ -264,12 +288,13 @@
                         <img src="https://www.svgrepo.com/show/353655/discord-icon.svg" alt="Discord">
                     </a>
                     <a href="#" target="_blank" class="block w-6 h-6 social-icon" aria-label="GroupMe">
-                        <svg class="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.372 0 0 4.39 0 9.813c0 4.22 3.52 7.792 8.21 9.165.26.495.534.98.82 1.45.326.54.688 1.066 1.08 1.572.103.13.21.256.32.38.238.27.52.48.81.65.11.06.22.12.34.17.43.19.89.21 1.34.02.43-.18.78-.5 1.01-.9.08-.13.15-.27.22-.4.4-.73.74-1.48 1.02-2.25.43-1.18.66-2.4.66-3.64v-.01C24 4.39 18.627 0 12 0zm-1.13 14.286l-2.07-2.915c-.21-.3-.6-.4-.9-.2l-1.35.96c-.3.21-.4.6-.2.9l2.07 2.915c.21.3.6.4.9.2l1.35-.96c.3-.21.4-.6.2-.9zM9.44 9.813c0-1.004.813-1.817 1.817-1.817s1.817.813 1.817 1.817-.813 1.817-1.817 1.817-1.817-.813-1.817-1.817zm4.25-3.272l-1.35.96c-.3.21-.6.1-.8-.2l-2.07-2.915c-.21-.3-.1-.6.2-.8l1.35-.96c-.3-.21.6-.1.8.2l2.07 2.915c.21.3.1.6-.2.8zm3.38 7.745l-2.07-2.915c-.21-.3-.6-.4-.9-.2l-1.35.96c-.3.21-.4.6-.2.9l2.07 2.915c.21.3.6.4.9.2l1.35-.96c.3-.21.4-.6.2-.9z" fill="currentColor"/></svg>
+                        <svg class="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.372 0 0 4.39 0 9.813c0 4.22 3.52 7.792 8.21 9.165.26.495.534.98.82 1.45.326.54.688 1.066 1.08 1.572.103.13.21.256.32.38.238.27.52.48.81.65.11.06.22.12.34.17.43.19.89.21 1.34.02.43-.18.78-.5 1.01-.9.08-.13.15-.27.22-.4.4-.73.74-1.48 1.02-2.25.43-1.18.66-2.4.66-3.64v-.01C24 4.39 18.627 0 12 0zm-1.13 14.286l-2.07-2.915c-.21-.3-.6-.4-.9-.2l-1.35.96c-.3.21-.4.6-.2.9l2.07 2.915c.21.3.6.4.9.2l1.35-.96c.3-.21.4-.6.2-.9zM9.44 9.813c0-1.004.813-1.817 1.817-1.817s1.817.813 1.817 1.817-.813 1.817-1.817 1.817-1.817-.813-1.817-1.817zm4.25-3.272l-1.35.96c-.3.21-.6.1-.8-.2l-2.07-2.915c-.21-.3-.1-.6.2-.8l1.35-.96c.3-.21.6-.1.8.2l2.07 2.915c.21.3.1.6-.2.8zm3.38 7.745l-2.07-2.915c-.21-.3-.6-.4-.9-.2l-1.35.96c-.3.21-.4.6-.2.9l2.07 2.915c.21.3.6.4.9.2l1.35-.96c.3-.21.4-.6.2-.9z" fill="currentColor"/></svg>
                     </a>
                     <a href="https://instagram.com/rutgersqfc" target="_blank" class="block w-6 h-6 social-icon" aria-label="Instagram">
                         <img src="https://www.svgrepo.com/show/353883/instagram-icon.svg" alt="Instagram">
                     </a>
-                    <!-- Add more social icons here as needed --></div>
+                    <!-- Add more social icons here as needed -->
+                </div>
             </div>
         </footer>
     </div>
@@ -322,12 +347,10 @@
                     body.classList.remove('menu-open');
 
                     // Wait for menu animation to start closing before switching pages
-                    setTimeout(() => {
-                        pages.forEach(page => page.classList.remove('active'));
-                        if (targetPage) {
-                            targetPage.classList.add('active');
-                        }
-                    }, 400); // Reduced duration for a faster, overlapping transition
+                    pages.forEach(page => page.classList.remove('active'));
+                    if (targetPage) {
+                        targetPage.classList.add('active');
+                    }
                 });
             });
         });
