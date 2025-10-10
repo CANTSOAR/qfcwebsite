@@ -13,7 +13,6 @@
             font-family: 'Inter', sans-serif;
             background-color: #000000;
             color: #FFFFFF;
-            overflow: hidden; /* Prevent scrolling */
         }
 
         /* --- Splash Screen Animations --- */
@@ -66,6 +65,10 @@
             pointer-events: auto;
         }
 
+        #content-wrapper {
+            height: 100dvh;
+        }
+
         /* --- Navigation Menu --- */
         #nav-trigger {
             /*transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.4s ease;*/
@@ -74,6 +77,11 @@
         }
         #nav-trigger:hover {
             transform: rotate(-45deg) scale(1.1);
+            border-color: #ffffff;
+        }
+        #nav-trigger.pulse-hover {
+            /* Example: Same styles as your :hover */
+            transform: rotate(45deg) scale(1.1);
             border-color: #ffffff;
         }
 
@@ -202,12 +210,12 @@
             <a href="#" class="menu-link text-4xl font-bold" data-page="about">About</a>
             <a href="#" class="menu-link text-4xl font-bold" data-page="team">E-Board</a>
             <a href="#" class="menu-link text-4xl font-bold" data-page="events">Events</a>
-            <a href="#" class="menu-link text-4xl font-bold" data-page="join">Join Us</a>
+            <a href="#" class="menu-link text-4xl font-bold" data-page="join">Contact</a>
         </nav>
     </div>
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="relative w-full h-screen">
+    <div id="content-wrapper" class="relative w-full">
         
         <!-- Home Page -->
         <div id="page-home" class="page active">
@@ -216,7 +224,7 @@
                     <span class="text-gray-100">Rutgers Quantitative Finance Club</span>
                 </h1>
                 <p class="max-w-3xl mx-auto text-lg md:text-xl text-gray-400">
-                    Bridging the gap between academic theory and industry practice for the next generation of quantitative minds.
+                    Bridging the gap between academic theory and industry practice for the next generation of Rutgers quants
                 </p>
             </main>
         </div>
@@ -238,7 +246,7 @@
         <div id="page-team" class="page">
             <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-center pb-24">
                  <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center tracking-tight">Executive Board 2024-2025</h2>
-                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8">
+                 <div class="flex flex-wrap justify-center gap-6 md:gap-8">
                     <a href="https://www.linkedin.com/in/krishaan-chaudhary/" target="_blank" rel="noopener noreferrer">
                         <div class="team-member-card text-center p-4 rounded-lg" rel="linkedin.com">
                             <img class="w-20 h-20 md:w-24 md:h-24 rounded-full mx-auto mb-4 bg-gray-700 border-2 border-gray-600" src="https://placehold.co/100x100/1a1a1a/ffffff?text=K" alt="Board Member">
@@ -407,6 +415,42 @@
                     }
                 });
             });
+
+            const pulseInterval = 2 * 60 * 1000; // 2 minutes in milliseconds
+            let pulseTimer;
+            let initialDelayTimer; // Variable to hold the initial timer
+
+            // This function will be called after the initial 10-second delay
+            const startInitialPulse = () => {
+                pulseEffect(); // Run the first pulse
+                resetTimer();  // Then, start the regular 2-minute timer
+            };
+
+            // This function adds the class, then removes it after a short delay
+            const pulseEffect = () => {
+                navTrigger.classList.add('pulse-hover');
+                setTimeout(() => {
+                    navTrigger.classList.remove('pulse-hover');
+                }, 1000); // The effect will last for 0.8 seconds
+            };
+
+            // This function resets the 2-minute timer
+            const resetTimer = () => {
+                clearTimeout(initialDelayTimer);
+                clearInterval(pulseTimer);
+                // Remove the pulse class in case it was active
+                navTrigger.classList.remove('pulse-hover');
+                // Start a new 2-minute timer
+                pulseTimer = setInterval(pulseEffect, pulseInterval);
+            };
+
+            // --- Event Listeners to Detect User Interaction ---
+            // Any of these actions will reset the timer.
+            ['mouseover', 'mouseout', 'click', 'focus', 'blur'].forEach(event => {
+                navTrigger.addEventListener(event, resetTimer);
+            });
+
+            initialDelayTimer = setTimeout(startInitialPulse, 10000); // 10000ms = 10 seconds
         });
     </script>
 </body>
