@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rutgers Quantitative Finance Club</title>
-    <link rel="icon" type="image/png" href="logo_black.png">
+    <link rel="icon" type="image/png" href="logos/logo_black.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -72,7 +72,6 @@
 
         /* --- Navigation Menu --- */
         #nav-trigger {
-            /*transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.4s ease;*/
             transition: 0.4s ease;
             transform: rotate(45deg);
         }
@@ -163,6 +162,26 @@
             z-index: 0;
         }
 
+        #page-events {
+            overflow: hidden;
+        }
+
+        #past-events-list {
+            scrollbar-width: thin;
+            scrollbar-color: #444 #111; /* Firefox */
+        }
+
+        #past-events-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        #past-events-list::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
+        }
+        #past-events-list::-webkit-scrollbar-track {
+            background: #111;
+        }
+
         .team-member-card {
             background-color: #1a1a1a;
             border: 1px solid #333;
@@ -185,19 +204,68 @@
             transform: translateY(-3px);
             filter: invert(70%); /* Slightly less white on hover */
         }
+
+        #team-grid-container {
+            width: 100%;
+            max-width: 800px; /* Adjust max-width to better suit 3 columns */
+            margin: 0 auto;
+            
+            display: grid;
+            gap: 2rem;
+            
+            /* --- KEY CHANGE HERE --- */
+            /* For Desktops: Always display 3 columns */
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        /* For Tablets: Switch to 2 columns */
+        @media (max-width: 768px) {
+            #team-grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* For Mobile Phones: Switch to 1 column */
+        @media (max-width: 480px) {
+            #team-grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .team-member-card {
+            /* These styles ensure content inside the card is centered, which looks
+            great when rows have a uniform height. */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            /* Keep your existing styles for the card */
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+        .team-member-card:hover {
+            border-color: #fff;
+            transform: scale(1.03);
+        }
+
     </style>
 </head>
 <body class="antialiased">
 
     <!-- Splash Screen -->
     <div id="splash-screen" class="fixed inset-0 bg-black z-[100] flex items-center justify-center pointer-events-none">
-        <img id="splash-logo" src="logo_black.png" alt="QFC Logo" class="w-32 h-32 md:w-40 md:h-40 opacity-0 filter invert">
+        <img id="splash-logo" src="logos/logo_black.png" alt="QFC Logo" class="w-32 h-32 md:w-40 md:h-40 opacity-0 filter invert">
     </div>
 
     <!-- Navigation Trigger -->
     <button id="nav-trigger" class="fixed top-6 left-6 md:top-8 md:left-8 z-[60] w-12 h-12 md:w-12 md:h-12 bg-black flex items-center justify-center border-2 border-gray-800 focus:outline-none">
         <div id="inner-logo" class="w-full h-full items-center justify-center">
-            <img src="logo_black.png" alt="QFC Logo Small" class="w-12 h-12 filter invert">
+            <img src="logos/logo_black.png" alt="QFC Logo Small" class="w-12 h-12 filter invert">
         </div>
     </button>
     
@@ -205,7 +273,7 @@
     <div id="nav-overlay" class="fixed inset-0 z-50 flex items-center justify-center opacity-0 pointer-events-none">
         <div id="expanding-bg"></div>
         <!-- Faint Logo in Menu Background -->
-        <img id="menu-background-logo" src="logo_black.png" alt="QFC Logo Faint">
+        <img id="menu-background-logo" src="logos/logo_black.png" alt="QFC Logo Faint">
         <nav id="vertical-menu" class="relative z-10 flex flex-col items-center space-y-8 text-center">
             <a href="#" class="menu-link text-4xl font-bold" data-page="home">Home</a>
             <a href="#" class="menu-link text-4xl font-bold" data-page="about">About</a>
@@ -216,7 +284,7 @@
     </div>
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="relative w-full">
+    <div id="content-wrapper" class="relative w-full overflow-y-auto">
         
         <!-- Home Page -->
         <div id="page-home" class="page active">
@@ -234,10 +302,10 @@
         <div id="page-about" class="page">
             <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-center pb-24">
                 <div class="section-card p-8 md:p-12 rounded-lg max-w-4xl w-full">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6 tracking-tight">Our Mission</h2>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 tracking-tight">Club Mission</h2>
                     <div class="space-y-4 text-gray-300 text-lg">
-                        <p>We are a club of Rutgers students passionate about learning and teaching Quantitative Finance. We welcome students with all levels of experience, and we serve as a forum for students to learn about algorithmic trading, data analysis, and careers in Quantitative Finance.</p>
-                        <p>Through guest speakers, workshops, and our "Road to Quant Finance" program, we aim to expose students to the industry, connect them with our vast alumni network, and prepare them for interviews and successful careers in the field.</p>
+                        <p>Our goal is to bring quant lessons and opportunities to Rutgers students. This includes workshops on core quantitative skills spanning mathematics, finance, and computer science, as well as recruiting/speaker events and competitions to show off your own skills.</p>
+                        <p>Through our wide range of events, we hope to expose club members to the exciting world of quant, while preparing them to break in. Sounds good? Check out our contact page to get in touch!</p>
                     </div>
                 </div>
             </main>
@@ -246,8 +314,9 @@
         <!-- Team Page -->
         <div id="page-team" class="page">
             <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-center pb-24">
-                 <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center tracking-tight">Executive Board 2024-2025</h2>
-                 <div class="flex flex-wrap justify-center gap-6 md:gap-8">
+                <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center tracking-tight">Executive Board 2026-2026</h2>
+                <div id="team-grid-container" class="gap-8">
+
                     <a href="https://www.linkedin.com/in/krishaan-chaudhary/" target="_blank" rel="noopener noreferrer">
                         <div class="team-member-card text-center p-4 rounded-lg" rel="linkedin.com">
                             <img class="w-20 h-20 md:w-24 md:h-24 rounded-full mx-auto mb-4 bg-gray-700 border-2 border-gray-600" src="https://placehold.co/100x100/1a1a1a/ffffff?text=K" alt="Board Member">
@@ -311,34 +380,166 @@
                             <p class="text-gray-400 text-sm">RTQF Co-head</p>
                         </div>
                     </a>
-                 </div>
+
+                </div>
             </main>
         </div>
 
         <!-- Events Page -->
         <div id="page-events" class="page">
-             <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-center pb-24">
-                 <div class="section-card p-8 md:p-12 rounded-lg max-w-4xl w-full">
-                     <h2 class="text-3xl md:text-4xl font-bold mb-8 tracking-tight">Our Events</h2>
-                     <div class="space-y-6">
-                         <div class="flex items-start space-x-8"><p class="w-1/4 font-semibold text-gray-300">Weekly</p><div class="w-3/4"><h3 class="font-bold text-xl">Technical Workshops</h3><p class="text-gray-400">Algorithmic trading basics to advanced options pricing.</p></div></div>
-                         <div class="flex items-start space-x-8 border-t border-gray-800 pt-6"><p class="w-1/4 font-semibold text-gray-300">Monthly</p><div class="w-3/4"><h3 class="font-bold text-xl">Guest Speaker Series</h3><p class="text-gray-400">Talks from professionals, alumni, and recruiters.</p></div></div>
-                         <div class="flex items-start space-x-8 border-t border-gray-800 pt-6"><p class="w-1/4 font-semibold text-gray-300">Annual</p><div class="w-3/4"><h3 class="font-bold text-xl">Salhotra Quant Challenge</h3><p class="text-gray-400">Our flagship competition in front of industry pros.</p></div></div>
-                     </div>
-                 </div>
+            <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-start pt-24 pb-24">
+                
+                <div class="w-full max-w-6xl mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-8 tracking-tight text-center">Events</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        
+                        <div class="section-card p-6 rounded-lg">
+                            <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Last Event (10/7)</p>
+                            <h3 class="font-bold text-xl mb-2">Workshop: Probability and Combinatorics</h3>
+                            <p class="text-gray-400">An overview of probability and its applications to quantitative finance</p>
+                        </div>
+                        
+                        <div class="section-card p-6 rounded-lg border-2 border-blue-500 shadow-lg shadow-blue-500/10">
+                            <p class="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-3">Next Event (10/14)</p>
+                            <h3 class="font-bold text-xl mb-2">CMU Quant Masters Recruiter</h3>
+                            <p class="text-gray-400">Get a chance to learn about post-undergraduate opportunities through CMU's Masters program</p>
+                        </div>
+
+                        <div class="section-card p-6 rounded-lg">
+                            <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Upcoming (10/21)</p>
+                            <h3 class="font-bold text-xl mb-2">Rutgers Quant Masters Recruiter</h3>
+                            <p class="text-gray-400">Learn about Rutgers' very own Quant Finance Masters program and how it can prep you</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="w-full max-w-4xl">
+                    <input type="search" id="event-search-bar" placeholder="Search Events Archive..." 
+                        class="w-full p-4 mb-8 text-lg bg-[#111] border-2 border-[#222] rounded-lg focus:outline-none focus:border-blue-500 transition-colors">
+
+                    <div id="past-events-list" class="space-y-6 overflow-y-auto max-h-[40vh] pr-2">
+
+                        <a href="#linktoslides" target="_blank" rel="noopener noreferrer">
+                            <div class="section-card p-6 rounded-lg flex items-start space-x-8" 
+                                data-search-term="list of important keywords for search">
+                                <p class="font-semibold text-gray-400">month year</p>
+                                <div>
+                                    <h3 class="font-bold text-xl">Past event title</h3>
+                                    <p class="text-gray-400">Past event description</p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="#linktoslides" target="_blank" rel="noopener noreferrer">
+                            <div class="section-card p-6 rounded-lg flex items-start space-x-8" 
+                                data-search-term="list of important keywords for search">
+                                <p class="font-semibold text-gray-400">month year</p>
+                                <div>
+                                    <h3 class="font-bold text-xl">Past event title</h3>
+                                    <p class="text-gray-400">Past event description</p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="#linktoslides" target="_blank" rel="noopener noreferrer">
+                            <div class="section-card p-6 rounded-lg flex items-start space-x-8" 
+                                data-search-term="list of important keywords for search">
+                                <p class="font-semibold text-gray-400">month year</p>
+                                <div>
+                                    <h3 class="font-bold text-xl">Past event title</h3>
+                                    <p class="text-gray-400">Past event description</p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="#linktoslides" target="_blank" rel="noopener noreferrer">
+                            <div class="section-card p-6 rounded-lg flex items-start space-x-8" 
+                                data-search-term="list of important keywords for search">
+                                <p class="font-semibold text-gray-400">month year</p>
+                                <div>
+                                    <h3 class="font-bold text-xl">Past event title</h3>
+                                    <p class="text-gray-400">Past event description</p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <div class="section-card p-6 rounded-lg flex items-start space-x-8"
+                            data-search-term="">
+                            <p class="font-semibold text-gray-400"></p>
+                            <div>
+                                <h3 class="font-bold text-xl"></h3>
+                                <p class="text-gray-400"></p>
+                            </div>
+                        </div>
+
+                        <div class="section-card p-6 rounded-lg flex items-start space-x-8"
+                            data-search-term="">
+                            <p class="font-semibold text-gray-400"></p>
+                            <div>
+                                <h3 class="font-bold text-xl"></h3>
+                                <p class="text-gray-400"></p>
+                            </div>
+                        </div>
+
+                        <div class="section-card p-6 rounded-lg flex items-start space-x-8"
+                            data-search-term="">
+                            <p class="font-semibold text-gray-400"></p>
+                            <div>
+                                <h3 class="font-bold text-xl"></h3>
+                                <p class="text-gray-400"></p>
+                            </div>
+                        </div>
+
+                        <div class="section-card p-6 rounded-lg flex items-start space-x-8"
+                            data-search-term="">
+                            <p class="font-semibold text-gray-400"></p>
+                            <div>
+                                <h3 class="font-bold text-xl"></h3>
+                                <p class="text-gray-400"></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </main>
+
+            <div class="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-black to-transparent pointer-events-none"></div>
         </div>
 
         <!-- Join Us Page -->
         <div id="page-join" class="page">
-             <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-center text-center pb-24">
-                 <h2 class="text-3xl md:text-4xl font-bold mb-4 tracking-tight">Become a Member</h2>
-                <p class="max-w-2xl mx-auto text-lg text-gray-400 mb-8">
-                    Ready to dive into the world of quantitative finance? Contact us to join our mailing list for updates on events, workshops, and recruitment.
-                </p>
-                <a href="mailto:rutgersqfc@gmail.com" class="inline-block bg-white text-black font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-200 transition-colors">
-                    Contact Us via Email
-                </a>
+            <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-center text-center pb-24">
+                
+                <div class="section-card p-8 md:p-12 rounded-lg max-w-3xl w-full space-y-6">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 tracking-tight">Get in Touch</h2>
+                    <p class="max-w-2xl mx-auto text-lg text-gray-400 mb-8">
+                        Want to join the club? Join the GroupMe and Discord for primary contact and follow the Insta for reminders and updates.
+                        Feel free to reach out to our email with any questions!
+                    </p>
+
+                    <div class="flex justify-center space-x-6">
+                        <a href="https://discord.gg/3D6FHTFfYp" target="_blank" rel="noopener noreferrer" class="social-icon">
+                            <img class="w-10 h-10" src="logos/discord_logo.png">
+                        </a>
+                        <a href="https://groupme.com/join_group/62574721/hoPK9PwN" target="_blank" rel="noopener noreferrer" class="social-icon">
+                            <img class="w-10 h-10" src="logos/groupme_logo.png">
+                        </a>
+                    </div>
+
+                    <div class="flex justify-center space-x-6">
+                        <a href="https://www.instagram.com/rutgersqfc" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram">
+                            <img class="w-10 h-10" src="logos/insta_logo.png">
+                        </a>
+                        <a href="mailto:rutgersqfc@gmail.com" class="social-icon" aria-label="Email">
+                            <img class="w-10 h-10" src="logos/mail_logo.png">
+                        </a>
+                    </div>
+
+                    <p class="max-w-2xl mx-auto text-lg text-gray-400 mb-8">
+                        Any potential sponsors and partners should reach out to <a href="mailto:rutgersqfc@gmail.com" class="text-blue-500">rutgersqfc@gmail.com</a> with inquiries.
+                    </p>
+                </div>
             </main>
         </div>
 
@@ -347,14 +548,17 @@
             <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-gray-500 text-sm order-2 md:order-1 mt-4 md:mt-0">&copy; 2025 Rutgers Quantitative Finance Club. All Rights Reserved.</p>
                 <div class="flex space-x-4 order-1 md:order-2">
-                    <a href="#" target="_blank" class="block w-6 h-6 social-icon" aria-label="Discord">
-                        <img src="https://www.svgrepo.com/show/353655/discord-icon.svg" alt="Discord">
+                    <a href="https://discord.gg/3D6FHTFfYp" target="_blank" class="block w-6 h-6 social-icon" aria-label="Discord">
+                        <img src="logos/discord_logo.png">
                     </a>
-                    <a href="#" target="_blank" class="block w-6 h-6 social-icon" aria-label="GroupMe">
-                        <svg class="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.372 0 0 4.39 0 9.813c0 4.22 3.52 7.792 8.21 9.165.26.495.534.98.82 1.45.326.54.688 1.066 1.08 1.572.103.13.21.256.32.38.238.27.52.48.81.65.11.06.22.12.34.17.43.19.89.21 1.34.02.43-.18.78-.5 1.01-.9.08-.13.15-.27.22-.4.4-.73.74-1.48 1.02-2.25.43-1.18.66-2.4.66-3.64v-.01C24 4.39 18.627 0 12 0zm-1.13 14.286l-2.07-2.915c-.21-.3-.6-.4-.9-.2l-1.35.96c-.3.21-.4.6-.2.9l2.07 2.915c.21.3.6.4.9.2l1.35-.96c.3-.21.4-.6.2-.9zM9.44 9.813c0-1.004.813-1.817 1.817-1.817s1.817.813 1.817 1.817-.813 1.817-1.817 1.817-1.817-.813-1.817-1.817zm4.25-3.272l-1.35.96c-.3.21-.6.1-.8-.2l-2.07-2.915c-.21-.3-.1-.6.2-.8l1.35-.96c.3-.21.6-.1.8.2l2.07 2.915c.21.3.1.6-.2.8zm3.38 7.745l-2.07-2.915c-.21-.3-.6-.4-.9-.2l-1.35.96c-.3.21-.4.6-.2.9l2.07 2.915c.21.3.6.4.9.2l1.35-.96c.3-.21.4-.6.2-.9z" fill="currentColor"/></svg>
+                    <a href="https://groupme.com/join_group/62574721/hoPK9PwN" target="_blank" class="block w-6 h-6 social-icon" aria-label="GroupMe">
+                        <img src="logos/groupme_logo.png">
                     </a>
                     <a href="https://instagram.com/rutgersqfc" target="_blank" class="block w-6 h-6 social-icon" aria-label="Instagram">
-                        <img src="https://www.svgrepo.com/show/353883/instagram-icon.svg" alt="Instagram">
+                        <img src="logos/insta_logo.png">
+                    </a>
+                    <a href="mailto:rutgersqfc@gmail.com" target="_blank" class="block w-6 h-6 social-icon" aria-label="Mail">
+                        <img src="logos/mail_logo.png">
                     </a>
                     <!-- Add more social icons here as needed -->
                 </div>
@@ -424,7 +628,9 @@
             // This function will be called after the initial 10-second delay
             const startInitialPulse = () => {
                 pulseEffect(); // Run the first pulse
-                resetTimer();  // Then, start the regular 2-minute timer
+                setTimeout(() => {
+                    resetTimer();  // Then, start the regular 2-minute timer
+                }, 1000);
             };
 
             // This function adds the class, then removes it after a short delay
@@ -454,6 +660,26 @@
             });
 
             initialDelayTimer = setTimeout(startInitialPulse, 10000); // 10000ms = 10 seconds
+
+            // Inside your DOMContentLoaded listener...
+            const searchBar = document.getElementById('event-search-bar');
+            const eventList = document.getElementById('past-events-list');
+            const events = eventList.querySelectorAll('.section-card');
+
+            searchBar.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+
+                events.forEach(eventCard => {
+                    const searchTerm = eventCard.dataset.searchTerm.toLowerCase();
+                    
+                    // If the event's search term includes the query, show it. Otherwise, hide it.
+                    if (searchTerm.includes(query)) {
+                        eventCard.style.display = 'flex'; // Use 'flex' since your cards use it
+                    } else {
+                        eventCard.style.display = 'none';
+                    }
+                });
+            });
         });
     </script>
 </body>
