@@ -60,6 +60,7 @@
             pointer-events: none;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
         .page.active {
             opacity: 1;
@@ -146,7 +147,7 @@
         #nav-overlay.open #vertical-menu .menu-link:nth-child(3) { transition-delay: 0.7s, 0.7s, 0s; }
         #nav-overlay.open #vertical-menu .menu-link:nth-child(4) { transition-delay: 0.8s, 0.8s, 0s; }
         #nav-overlay.open #vertical-menu .menu-link:nth-child(5) { transition-delay: 0.9s, 0.9s, 0s; }
-        #nav-overlay.open #vertical-menu .menu-link:nth-child(5) { transition-delay: 1s, 1s, 0s; }
+        #nav-overlay.open #vertical-menu .menu-link:nth-child(6) { transition-delay: 1s, 1s, 0s; }
 
         /* Faint background logo in menu */
         #menu-background-logo {
@@ -254,6 +255,24 @@
             transform: scale(1.03);
         }
 
+        .fluid-title {
+            /* This will make the font size:
+            - A minimum of 1.75rem (28px).
+            - A maximum of 2.25rem (36px).
+            - In between, it will be 5% of the viewport width (5vw), scaling smoothly.
+            */
+            font-size: clamp(1.75rem, 5vw, 2.25rem);
+        }
+
+        .fluid-body {
+            /* This will make the paragraph font size:
+            - A minimum of 0.9rem (~14.5px).
+            - A maximum of 1.125rem (18px).
+            - In between, it will scale based on viewport width.
+            */
+            font-size: clamp(.75rem, 2.5vw, 1.125rem);
+        }
+
     </style>
 </head>
 <body class="antialiased">
@@ -302,12 +321,12 @@
 
         <!-- About Page -->
         <div id="page-about" class="page">
-            <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-center pb-24">
+            <main class="container mx-auto px-6 flex-grow flex flex-col pt-[12vh] justify-center pb-24">
                 <div class="section-card p-8 md:p-12 rounded-lg max-w-4xl w-full">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6 tracking-tight">Club Mission</h2>
-                    <div class="space-y-4 text-gray-300 text-lg">
-                        <p>Our goal is to bring quant lessons and opportunities to Rutgers students. This includes workshops on core quantitative skills spanning mathematics, finance, and computer science, as well as recruiting/speaker events and competitions to show off your own skills.</p>
-                        <p>Through our wide range of events, we hope to expose club members to the exciting world of quant, while preparing them to break in. Sounds good? Check out our contact page to get in touch!</p>
+                    <h2 class="font-bold mb-6 tracking-tight fluid-title">Club Mission</h2>
+                    <div class="space-y-4 text-gray-300">
+                        <p class="fluid-body text-left">Our goal is to bring quant lessons and opportunities to Rutgers students. This includes workshops on core quantitative skills spanning mathematics, finance, and computer science, as well as recruiting/speaker events and competitions to show off your own skills.</p>
+                        <p class="fluid-body text-left">Through our wide range of events, we hope to expose club members to the exciting world of quant, while preparing them to break in. Sounds good? Check out our contact page to get in touch!</p>
                     </div>
                 </div>
             </main>
@@ -315,8 +334,7 @@
 
         <!-- Team Page -->
         <div id="page-team" class="page">
-            <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-center pb-24">
-                <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center tracking-tight">Executive Board 2026-2026</h2>
+            <main class="container mx-auto px-6 flex-grow flex flex-col items-center pt-[20vh] pb-[20vh] overflow-y-auto">                <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center tracking-tight">Executive Board 2026-2026</h2>
                 <div id="team-grid-container" class="gap-8">
 
                     <a href="https://www.linkedin.com/in/krishaan-chaudhary/" target="_blank" rel="noopener noreferrer">
@@ -393,7 +411,7 @@
                 
                 <div class="w-full max-w-6xl mb-16">
                     <h2 class="text-3xl md:text-4xl font-bold mb-8 tracking-tight text-center">Events</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8 overflow-y-auto max-h-[40vh]">
                         
                         <div class="section-card p-6 rounded-lg">
                             <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Last Event (10/7)</p>
@@ -560,7 +578,7 @@
         <!-- Footer for all pages -->
         <footer class="absolute bottom-0 left-0 right-0 py-4 bg-[#0A0A0A]">
             <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-gray-500 text-sm order-2 md:order-1 mt-4 md:mt-0">&copy; 2025 Rutgers Quantitative Finance Club. All Rights Reserved.</p>
+                <p class="text-gray-500 text-sm order-2 md:order-1 mt-4 md:mt-0 text-center">&copy; 2025 Rutgers Quantitative Finance Club. All Rights Reserved.</p>
                 <div class="flex space-x-4 order-1 md:order-2">
                     <a href="https://discord.gg/3D6FHTFfYp" target="_blank" class="block w-6 h-6 social-icon" aria-label="Discord">
                         <img src="logos/discord_logo.png">
