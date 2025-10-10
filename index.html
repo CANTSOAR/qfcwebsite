@@ -429,6 +429,7 @@
             // This function adds the class, then removes it after a short delay
             const pulseEffect = () => {
                 navTrigger.classList.add('pulse-hover');
+                console.log("DOING PULSE")
                 setTimeout(() => {
                     navTrigger.classList.remove('pulse-hover');
                 }, 1000); // The effect will last for 0.8 seconds
