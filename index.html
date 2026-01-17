@@ -122,7 +122,7 @@
 
         .first-visit #nav-trigger {
             animation: gentlePulse 2s ease-in-out 2;
-            animation-delay: 3.5s;
+            animation-delay: 5.5s;
         }
 
         #nav-overlay {
@@ -286,9 +286,66 @@
             font-size: clamp(.75rem, 2.5vw, 1.125rem);
         }
 
+        /* --- Custom Cursor Styles --- */
+
+        /* 1. Hide the default cursor on EVERYTHING */
+        * {
+            cursor: none !important;
+        }
+
+        /* 2. Style the custom square */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 10px;      /* Size of the square */
+            height: 10px;     /* Size of the square */
+            background-color: white;
+            z-index: 9999;    /* Ensure it's on top of everything */
+            pointer-events: none; /* Crucial: lets clicks pass through to buttons below */
+            transform: translate(-50%, -50%); /* Centers the square on the mouse coordinates */
+            transition: transform 0.1s ease;  /* Smooths the shrink animation */
+            
+            /* Optional: This makes the cursor invert colors when over white text,
+            so you can still see it. Highly recommended for black/white sites. */
+            mix-blend-mode: difference; 
+        }
+
+        /* 3. The "Shrink" State */
+        #custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.6); /* Shrink to 60% size */
+        }
+
+        /* 4. Hide custom cursor on touch devices (phones/tablets) so it doesn't get stuck */
+        @media (hover: none) and (pointer: coarse) {
+            #custom-cursor {
+                display: none;
+            }
+            * {
+                cursor: auto !important;
+            }
+        }
+
+        /* Menu Label Styling */
+        #menu-label {
+            transition: opacity 0.4s ease;
+            opacity: 1;
+        }
+
+        body.menu-open #menu-label {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Also hide on first visit during splash */
+        .first-visit #menu-label {
+            opacity: 0;
+        }
+
     </style>
 </head>
 <body class="antialiased">
+    <div id="custom-cursor"></div>
 
     <!-- Splash Screen -->
     <div id="splash-screen" class="fixed inset-0 bg-black z-[100] flex items-center justify-center pointer-events-none">
@@ -301,6 +358,12 @@
             <img src="logos/logo_black.png" alt="QFC Logo Small" class="w-12 h-12 filter invert">
         </div>
     </button>
+
+    <!-- ADD THIS NEW ELEMENT -->
+    <div id="menu-label" class="fixed top-[4.5rem] left-6 md:top-[5rem] md:left-8 z-[60] text-white text-sm font-medium pointer-events-none">
+        <br/>
+        MENU
+    </div>
     
     <!-- Navigation Overlay -->
     <div id="nav-overlay" class="fixed inset-0 z-50 flex items-center justify-center opacity-0 pointer-events-none">
@@ -615,12 +678,27 @@
         document.addEventListener('DOMContentLoaded', () => {
             const body = document.body;
             const splashScreen = document.getElementById('splash-screen');
+            const menuLabel = document.getElementById('menu-label');
+
+            // Check if menu was clicked before - if so, hide label immediately
+            if (localStorage.getItem('menuClickedBefore')) {
+                menuLabel.style.opacity = '0';
+            }
 
             // Check if the 'hasVisitedBefore' flag is set in localStorage
             if (localStorage.getItem('hasVisitedBefore')) {
                 // If it exists, the user has visited before. Hide the splash screen instantly.
                 splashScreen.style.display = 'none';
             } else {
+                // Add class to hide menu label initially
+                body.classList.add('first-visit');
+                
+                // Fade in menu label after splash animation (only if not clicked before)
+                setTimeout(() => {
+                    if (!localStorage.getItem('menuClickedBefore')) {
+                        menuLabel.style.opacity = '1';
+                    }
+                }, 3500);
                 // If it doesn't exist, this is the first visit.
                 // 1. Let the animation play out as normal.
                 splashScreen.addEventListener('animationend', (e) => {
@@ -645,6 +723,13 @@
             navTrigger.addEventListener('click', () => {
                 navOverlay.classList.toggle('open');
                 body.classList.toggle('menu-open');
+                
+                // Permanently hide menu label after first click
+                if (!localStorage.getItem('menuClickedBefore')) {
+                    const menuLabel = document.getElementById('menu-label');
+                    menuLabel.style.opacity = '0';
+                    localStorage.setItem('menuClickedBefore', 'true');
+                }
             });
 
             // --- Page Switching ---
@@ -744,6 +829,26 @@
                         eventCard.style.display = 'none';
                     }
                 });
+            });
+
+            // --- Custom Cursor Logic ---
+            const cursor = document.getElementById('custom-cursor');
+
+            // 1. Move the cursor
+            document.addEventListener('mousemove', (e) => {
+                // Update position to mouse coordinates
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+
+            // 2. Add shrink class on mouse down
+            document.addEventListener('mousedown', () => {
+                cursor.classList.add('clicking');
+            });
+
+            // 3. Remove shrink class on mouse up
+            document.addEventListener('mouseup', () => {
+                cursor.classList.remove('clicking');
             });
         });
     </script>
