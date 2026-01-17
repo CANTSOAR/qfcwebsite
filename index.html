@@ -664,8 +664,16 @@
             const startInitialPulse = () => {
                 pulseEffect(); // Run the first pulse
                 setTimeout(() => {
-                    resetTimer();  // Then, start the regular 2-minute timer
-                }, 100);
+        
+                    // 3. Fire the second pulse
+                    pulseEffect();
+
+                    // 4. Wait for the second pulse to finish, then start the regular timer loop
+                    setTimeout(() => {
+                        resetTimer(); 
+                    }, 1000);
+
+                }, 1000);
             };
 
             // This function adds the class, then removes it after a short delay
@@ -675,7 +683,7 @@
                 setTimeout(() => {
                     navTrigger.classList.remove('pulse-hover');
                     console.log("PULSE DONE")
-                }, 1000); // The effect will last for 0.8 seconds
+                }, 500); // The effect will last for 0.8 seconds
             };
 
             // This function resets the 2-minute timer
@@ -694,7 +702,7 @@
                 navTrigger.addEventListener(event, resetTimer);
             });
 
-            initialDelayTimer = setTimeout(startInitialPulse, 10000); // 10000ms = 10 seconds
+            initialDelayTimer = setTimeout(startInitialPulse, 1000); // 10000ms = 10 seconds
 
             // Inside your DOMContentLoaded listener...
             const searchBar = document.getElementById('event-search-bar');
