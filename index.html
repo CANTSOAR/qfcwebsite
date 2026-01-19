@@ -727,7 +727,7 @@
                 // Permanently hide menu label after first click
                 if (!localStorage.getItem('menuClickedBefore')) {
                     const menuLabel = document.getElementById('menu-label');
-                    menuLabel.style.opacity = '0';
+                    menuLabel.style.opacity = '1';
                     localStorage.setItem('menuClickedBefore', 'true');
                 }
             });
