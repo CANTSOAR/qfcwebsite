@@ -872,14 +872,129 @@
         </div>
 
         <!-- Research Page -->
-        <div id="page-research" class="page">
-            <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-center text-center pb-24">
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter mb-4 leading-tight">
-                    <span class="text-gray-100">Coming Soon...</span>
-                </h1>
-                <p class="max-w-3xl mx-auto text-lg md:text-xl text-gray-400">
-                    Keep an eye out for our research teams and papers coming this semester O_O
-                </p>
+        <div id="page-research" class="page overflow-y-auto">
+            <main class="container mx-auto px-6 flex-grow flex flex-col items-center pt-16 pb-32">
+
+                <!-- Hero Section -->
+                <div class="text-center mb-16 max-w-4xl">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tighter mb-4 leading-tight">
+                        <span
+                            class="bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 bg-clip-text text-transparent">Research
+                            Teams</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
+                        Learn to translate academic papers into working code
+                    </p>
+                </div>
+
+                <!-- Program Details Card -->
+                <div class="section-card p-8 md:p-12 rounded-lg max-w-4xl w-full mb-12">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-6 tracking-tight">What Are Research Teams?</h2>
+                    <div class="space-y-4 text-gray-300 text-left">
+                        <p>Research Teams are small groups of <strong class="text-white">3-4 members</strong> who work
+                            together to explore, understand, and implement quantitative finance papers. Each team will:
+                        </p>
+
+                        <ul class="list-disc list-inside space-y-2 ml-4">
+                            <li>Find and select a quant or quant-adjacent research paper</li>
+                            <li>Break down the methodology and mathematical concepts</li>
+                            <li>Implement the paper's ideas in code (Python, C++, etc.)</li>
+                            <li>Build a working codebase that supports or extends the paper</li>
+                        </ul>
+
+                        <div class="mt-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                            <p class="text-emerald-400 font-semibold mb-2">🎯 The Goal</p>
+                            <p class="text-gray-300">The primary focus is <strong class="text-white">learning</strong>.
+                                We want to help members develop the skill of translating academic research into
+                                practical, working code—a crucial ability for anyone pursuing a career in quantitative
+                                finance.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- What You'll Gain -->
+                <div class="section-card p-8 md:p-12 rounded-lg max-w-4xl w-full mb-12">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-6 tracking-tight">What You'll Gain</h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="flex items-start space-x-4">
+                            <div
+                                class="w-10 h-10 rounded-lg bg-teal-500/20 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-white mb-1">Paper Reading Skills</h3>
+                                <p class="text-gray-400 text-sm">Learn to extract key insights from academic
+                                    publications</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div
+                                class="w-10 h-10 rounded-lg bg-teal-500/20 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-white mb-1">Implementation Experience</h3>
+                                <p class="text-gray-400 text-sm">Translate mathematical concepts into working code</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div
+                                class="w-10 h-10 rounded-lg bg-teal-500/20 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-white mb-1">Team Collaboration</h3>
+                                <p class="text-gray-400 text-sm">Work closely with peers who share your interests</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div
+                                class="w-10 h-10 rounded-lg bg-teal-500/20 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-white mb-1">Portfolio Projects</h3>
+                                <p class="text-gray-400 text-sm">Build tangible work to showcase your abilities</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sign Up Section -->
+                <div class="section-card p-8 md:p-12 rounded-lg max-w-4xl w-full">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 tracking-tight text-center">Join a Research Team</h2>
+                    <p class="text-gray-400 text-center mb-8">Sign up below to be placed on a team. No prior research
+                        experience required—just curiosity and willingness to learn!</p>
+
+                    <!-- Tally Form Embed - Replace with your form URL -->
+                    <div class="w-full min-h-[400px] flex items-center justify-center">
+                        <!-- Replace the above with your Tally embed once ready:
+                        <iframe data-tally-src="https://tally.so/r/LZpjqj?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" 
+                            loading="lazy" width="100%" height="400" frameborder="0" marginheight="0" marginwidth="0" 
+                            title="Research Team Sign Up"></iframe>
+                        <script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w;s.onload=v;s.onerror=v;d.body.appendChild(s);}</script>
+                        -->
+                    </div>
+                </div>
+
             </main>
         </div>
 
