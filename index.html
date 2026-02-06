@@ -1069,6 +1069,13 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Handle redirect from 404.html for GitHub Pages SPA routing
+            const redirectPath = sessionStorage.getItem('redirect');
+            if (redirectPath) {
+                sessionStorage.removeItem('redirect');
+                history.replaceState(null, '', redirectPath);
+            }
+
             const body = document.body;
             const splashScreen = document.getElementById('splash-screen');
 
@@ -1097,8 +1104,50 @@
             const menuLinks = document.querySelectorAll('.menu-link');
             const pages = document.querySelectorAll('.page');
 
-            // Set initial active link
-            document.querySelector('.menu-link[data-page="home"]').classList.add('active-link');
+            // --- URL-Based Routing ---
+            const navigateToPage = (pageId, pushState = true) => {
+                const targetPage = document.getElementById(`page-${pageId}`);
+                if (!targetPage) {
+                    // Default to home if page doesn't exist
+                    pageId = 'home';
+                }
+
+                // Update active page
+                pages.forEach(page => page.classList.remove('active'));
+                const activePage = document.getElementById(`page-${pageId}`);
+                if (activePage) {
+                    activePage.classList.add('active');
+                }
+
+                // Update active menu link
+                menuLinks.forEach(l => l.classList.remove('active-link'));
+                const activeLink = document.querySelector(`.menu-link[data-page="${pageId}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active-link');
+                }
+
+                // Update URL (without page reload)
+                if (pushState) {
+                    const newUrl = pageId === 'home' ? '/' : `/${pageId}`;
+                    history.pushState({ page: pageId }, '', newUrl);
+                }
+            };
+
+            // Get initial page from URL path
+            const getPageFromPath = () => {
+                const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
+                return path || 'home';
+            };
+
+            // Set initial page based on URL
+            const initialPage = getPageFromPath();
+            navigateToPage(initialPage, false);
+
+            // Handle browser back/forward buttons
+            window.addEventListener('popstate', (e) => {
+                const pageId = e.state?.page || getPageFromPath();
+                navigateToPage(pageId, false);
+            });
 
             // --- Navigation Toggle ---
             navTrigger.addEventListener('click', () => {
@@ -1126,19 +1175,12 @@
                         return;
                     }
 
-                    // Highlight the clicked link immediately
-                    menuLinks.forEach(l => l.classList.remove('active-link'));
-                    e.currentTarget.classList.add('active-link');
-
                     // Close the menu
                     navOverlay.classList.remove('open');
                     body.classList.remove('menu-open');
 
-                    // Wait for menu animation to start closing before switching pages
-                    pages.forEach(page => page.classList.remove('active'));
-                    if (targetPage) {
-                        targetPage.classList.add('active');
-                    }
+                    // Navigate to the page (this also updates URL and active states)
+                    navigateToPage(targetPageId);
                 });
             });
 
