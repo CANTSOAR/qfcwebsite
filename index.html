@@ -419,11 +419,162 @@
             opacity: 0;
             pointer-events: none;
         }
+
+        /* --- Puzzle Modal Lightbox --- */
+        #puzzle-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        #puzzle-modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #puzzle-modal img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        #puzzle-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2.5rem;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        #puzzle-modal-close:hover {
+            opacity: 1;
+        }
+
+        /* --- Puzzle Challenge Section --- */
+        .puzzle-image-container {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .puzzle-image-container:hover {
+            transform: scale(1.02);
+        }
+
+        .puzzle-image-container::after {
+            content: 'Click to enlarge';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .puzzle-image-container:hover::after {
+            opacity: 1;
+        }
+
+        .puzzle-answer-input {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            color: white;
+            padding: 12px 16px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            transition: border-color 0.2s;
+            text-align: center;
+            width: 200px;
+        }
+
+        .puzzle-answer-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .puzzle-answer-input.error {
+            border-color: #ef4444;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-8px);
+            }
+
+            75% {
+                transform: translateX(8px);
+            }
+        }
+
+        .puzzle-submit-btn {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+            font-weight: 600;
+            padding: 12px 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .puzzle-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .rules-link {
+            color: #60a5fa;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+
+        .rules-link:hover {
+            color: #93c5fd;
+        }
+
+        /* Hidden sections toggle */
+        .hidden-section {
+            display: none;
+        }
+
+        .hidden-section.visible {
+            display: block;
+        }
     </style>
 </head>
 
 <body class="antialiased">
     <div id="custom-cursor"></div>
+
+    <!-- Puzzle Image Modal -->
+    <div id="puzzle-modal">
+        <button id="puzzle-modal-close">&times;</button>
+        <img src="puzzle.png" alt="Queens + Zip Puzzle - Full Size">
+    </div>
 
     <!-- Splash Screen -->
     <div id="splash-screen" class="fixed inset-0 bg-black z-[100] flex items-center justify-center pointer-events-none">
@@ -833,12 +984,61 @@
                     </div>
                 </div>
 
-                <!-- Registration Form Section - Tally Embed -->
-                <div
+                <!-- Puzzle Challenge Section -->
+                <div id="puzzle-challenge-section"
                     class="section-card p-8 rounded-lg max-w-4xl w-full mb-10 border-2 border-blue-500/30 bg-gradient-to-br from-blue-500/5 to-cyan-500/5">
                     <div class="text-center mb-6">
+                        <p class="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-2">Early Access
+                            Challenge</p>
+                        <h2 class="text-3xl font-bold mb-2">Solve the Puzzle to Register</h2>
+                        <p class="text-gray-400">Complete this Queens + Zip puzzle to unlock early registration.</p>
+                    </div>
+
+                    <!-- Puzzle Image -->
+                    <div class="flex justify-center mb-6">
+                        <div id="puzzle-image-container"
+                            class="puzzle-image-container rounded-lg overflow-hidden border border-gray-700">
+                            <img src="puzzle.png" alt="Queens + Zip Puzzle" class="max-w-full h-auto max-h-[400px]">
+                        </div>
+                    </div>
+
+                    <!-- Rules Links -->
+                    <div class="text-center mb-8">
+                        <p class="text-gray-400 text-sm mb-2">Not familiar with these puzzles? Learn the rules:</p>
+                        <div class="flex justify-center gap-6">
+                            <a href="https://www.linkedin.com/games/queens/" target="_blank" rel="noopener noreferrer"
+                                class="rules-link text-sm">
+                                LinkedIn Queens Rules →
+                            </a>
+                            <a href="https://www.linkedin.com/games/zip/" target="_blank" rel="noopener noreferrer"
+                                class="rules-link text-sm">
+                                LinkedIn Zip Rules →
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Answer Input -->
+                    <div class="flex flex-col items-center gap-4">
+                        <label for="puzzle-answer" class="text-gray-300 font-medium">Enter your answer:</label>
+                        <div class="flex items-center gap-4">
+                            <input type="text" id="puzzle-answer" class="puzzle-answer-input" placeholder="Your answer"
+                                autocomplete="off">
+                            <button id="puzzle-submit" class="puzzle-submit-btn">Submit</button>
+                        </div>
+                        <p id="puzzle-error" class="text-red-400 text-sm hidden">Incorrect answer. Try again or sign up
+                            for our newsletter below.</p>
+                    </div>
+                </div>
+
+                <!-- Registration Form Section (Hidden until correct answer) -->
+                <div id="registration-section"
+                    class="hidden-section section-card p-8 rounded-lg max-w-4xl w-full mb-10 border-2 border-green-500/30 bg-gradient-to-br from-green-500/5 to-emerald-500/5">
+                    <div class="text-center mb-6">
+                        <p class="text-sm font-semibold text-green-400 uppercase tracking-wider mb-2">🎉 Puzzle Solved!
+                        </p>
                         <h2 class="text-3xl font-bold mb-2">Register for the Knight</h2>
-                        <p class="text-gray-400">Applications are reviewed on a rolling basis.</p>
+                        <p class="text-gray-400">You've unlocked early access. Applications are reviewed on a rolling
+                            basis.</p>
                     </div>
 
                     <!-- Tally Form Embed -->
@@ -848,6 +1048,25 @@
                         title="Trade the Knight Registration">
                     </iframe>
                     <script>var d = document, w = "https://tally.so/widgets/embed.js", v = function () { "undefined" != typeof Tally ? Tally.loadEmbeds() : d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function (e) { e.src = e.dataset.tallySrc })) }; if ("undefined" != typeof Tally) v(); else if (d.querySelector('script[src="' + w + '"]') == null) { var s = d.createElement("script"); s.src = w; s.onload = v; s.onerror = v; d.body.appendChild(s); }</script>
+                </div>
+
+                <!-- Newsletter Signup Section (Shown after wrong answer) -->
+                <div id="newsletter-section"
+                    class="hidden-section section-card p-8 rounded-lg max-w-4xl w-full mb-10 border-2 border-amber-500/30 bg-gradient-to-br from-amber-500/5 to-orange-500/5">
+                    <div class="text-center mb-6">
+                        <p class="text-sm font-semibold text-amber-400 uppercase tracking-wider mb-2">Can't solve it?
+                        </p>
+                        <h2 class="text-3xl font-bold mb-2">Join the Waitlist</h2>
+                        <p class="text-gray-400">Sign up for our newsletter and we'll notify you on <strong
+                                class="text-white">March 1st</strong> when general registration opens.</p>
+                    </div>
+
+                    <!-- Newsletter Tally Form - REPLACE WITH YOUR NEWSLETTER FORM URL -->
+                    <iframe
+                        data-tally-src="https://tally.so/embed/__NEWSLETTER_FORM_ID__?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+                        loading="lazy" width="100%" height="300" frameborder="0" marginheight="0" marginwidth="0"
+                        title="Competition Newsletter Signup">
+                    </iframe>
                 </div>
 
                 <!-- Sponsors Section -->
@@ -1281,6 +1500,121 @@
                     cursor.style.opacity = '1';
                 });
             });
+
+            // --- Puzzle Challenge Logic ---
+            const puzzleModal = document.getElementById('puzzle-modal');
+            const puzzleModalClose = document.getElementById('puzzle-modal-close');
+            const puzzleImageContainer = document.getElementById('puzzle-image-container');
+            const puzzleAnswer = document.getElementById('puzzle-answer');
+            const puzzleSubmit = document.getElementById('puzzle-submit');
+            const puzzleError = document.getElementById('puzzle-error');
+            const puzzleSection = document.getElementById('puzzle-challenge-section');
+            const registrationSection = document.getElementById('registration-section');
+            const newsletterSection = document.getElementById('newsletter-section');
+
+            /*
+             * ╔═══════════════════════════════════════════════════════════════════════╗
+             * ║  So you didn't want to solve the puzzle? :)                           ║
+             * ║                                                                       ║
+             * ║  I respect the hustle. Reading source code is a quant skill too.      ║
+             * ║                                                                       ║
+             * ║  The answer below is base64 encoded. If you can decode it, you've     ║
+             * ║  earned your spot. Welcome to Trade the Knight!                       ║
+             * ║                                                                       ║
+             * ║  Pro tip: Run atob('...') in your browser console.                    ║
+             * ╚═══════════════════════════════════════════════════════════════════════╝
+             */
+            // To encode your answer: btoa('YOUR_NUMBER') in browser console
+            const CORRECT_ANSWER = atob('__PUZZLE_ANSWER_BASE64__'); // Injected by GitHub Actions
+
+            // Check if user already solved the puzzle (persisted in localStorage)
+            const checkPuzzleSolved = () => {
+                return localStorage.getItem('puzzleSolved') === 'true';
+            };
+
+            // Initialize puzzle state on page load
+            const initPuzzleState = () => {
+                if (checkPuzzleSolved()) {
+                    // User already solved - show registration, hide puzzle
+                    puzzleSection.style.display = 'none';
+                    registrationSection.classList.add('visible');
+                    newsletterSection.classList.remove('visible');
+                }
+            };
+
+            initPuzzleState();
+
+            // Open modal when clicking puzzle image
+            if (puzzleImageContainer) {
+                puzzleImageContainer.addEventListener('click', () => {
+                    puzzleModal.classList.add('open');
+                });
+            }
+
+            // Close modal
+            if (puzzleModalClose) {
+                puzzleModalClose.addEventListener('click', () => {
+                    puzzleModal.classList.remove('open');
+                });
+            }
+
+            // Close modal when clicking outside image
+            if (puzzleModal) {
+                puzzleModal.addEventListener('click', (e) => {
+                    if (e.target === puzzleModal) {
+                        puzzleModal.classList.remove('open');
+                    }
+                });
+            }
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && puzzleModal.classList.contains('open')) {
+                    puzzleModal.classList.remove('open');
+                }
+            });
+
+            // Verify puzzle answer
+            const verifyAnswer = () => {
+                const userAnswer = puzzleAnswer.value.trim();
+
+                if (userAnswer === CORRECT_ANSWER) {
+                    // Correct answer!
+                    localStorage.setItem('puzzleSolved', 'true');
+                    puzzleSection.style.display = 'none';
+                    registrationSection.classList.add('visible');
+                    newsletterSection.classList.remove('visible');
+                    puzzleError.classList.add('hidden');
+
+                    // Reload Tally embeds for the newly visible form
+                    if (typeof Tally !== 'undefined') {
+                        Tally.loadEmbeds();
+                    }
+                } else {
+                    // Wrong answer
+                    puzzleAnswer.classList.add('error');
+                    puzzleError.classList.remove('hidden');
+                    newsletterSection.classList.add('visible');
+
+                    // Remove error styling after animation
+                    setTimeout(() => {
+                        puzzleAnswer.classList.remove('error');
+                    }, 400);
+                }
+            };
+
+            if (puzzleSubmit) {
+                puzzleSubmit.addEventListener('click', verifyAnswer);
+            }
+
+            // Also verify on Enter key
+            if (puzzleAnswer) {
+                puzzleAnswer.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        verifyAnswer();
+                    }
+                });
+            }
         });
     </script>
 </body>

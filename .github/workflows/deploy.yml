@@ -1,0 +1,49 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Inject secrets into HTML
+        run: |
+          # Base64 encode the puzzle answer
+          ENCODED_ANSWER=$(echo -n "${{ secrets.PUZZLE_ANSWER }}" | base64)
+          
+          # Replace placeholders in index.html
+          sed -i "s|__PUZZLE_ANSWER_BASE64__|${ENCODED_ANSWER}|g" index.html
+          sed -i "s|__NEWSLETTER_FORM_ID__|${{ secrets.NEWSLETTER_FORM_ID }}|g" index.html
+          
+          echo "✅ Secrets injected successfully"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
