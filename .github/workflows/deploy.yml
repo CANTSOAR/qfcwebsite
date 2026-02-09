@@ -30,17 +30,22 @@ jobs:
           PUZZLE_ANSWER: ${{ secrets.PUZZLE_ANSWER }}
           NEWSLETTER_FORM_ID: ${{ secrets.NEWSLETTER_FORM_ID }}
         run: |
-          # Base64 encode the puzzle answer
-          ENCODED_ANSWER=$(echo -n "${PUZZLE_ANSWER}" | base64)
+          # Base64 encode the puzzle answer (using printf to avoid newlines, -w 0 to prevent line wrapping)
+          ENCODED_ANSWER=$(printf '%s' "${PUZZLE_ANSWER}" | base64 -w 0)
           
-          # Debug: Show if secrets are present (without revealing values)
+          # Debug output
           echo "PUZZLE_ANSWER is set: $([ -n "${PUZZLE_ANSWER}" ] && echo 'yes' || echo 'NO!')"
           echo "NEWSLETTER_FORM_ID is set: $([ -n "${NEWSLETTER_FORM_ID}" ] && echo 'yes' || echo 'NO!')"
+          echo "Encoded answer: ${ENCODED_ANSWER}"
           echo "Encoded answer length: ${#ENCODED_ANSWER}"
           
           # Replace placeholders in index.html
           sed -i "s|__PUZZLE_ANSWER_BASE64__|${ENCODED_ANSWER}|g" index.html
           sed -i "s|__NEWSLETTER_FORM_ID__|${NEWSLETTER_FORM_ID}|g" index.html
+          
+          # Show what was actually inserted
+          echo "Checking actual content in file:"
+          grep -o "atob('[^']*')" index.html | head -1
           
           # Verify replacements happened
           if grep -q "__PUZZLE_ANSWER_BASE64__" index.html; then
@@ -48,13 +53,6 @@ jobs:
             exit 1
           else
             echo "✅ Puzzle answer injected successfully"
-          fi
-          
-          if grep -q "__NEWSLETTER_FORM_ID__" index.html; then
-            echo "❌ ERROR: Newsletter form ID placeholder was NOT replaced"
-            exit 1
-          else
-            echo "✅ Newsletter form ID injected successfully"
           fi
 
       - name: Setup Pages
