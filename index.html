@@ -384,8 +384,10 @@
             /* Crucial: lets clicks pass through to buttons below */
             transform: translate(-50%, -50%);
             /* Centers the square on the mouse coordinates */
-            transition: transform 0.1s ease;
+            transition: transform 0.1s ease, opacity 0.15s ease;
             /* Smooths the shrink animation */
+            opacity: 0;
+            /* Start hidden until mouse moves */
 
             /* Optional: This makes the cursor invert colors when over white text,
             so you can still see it. Highly recommended for black/white sites. */
@@ -733,7 +735,6 @@
         </div>
 
         <!-- Events Page -->
-        <!-- Events Page - Commented Out
         <div id="page-events" class="page">
             <main class="container mx-auto px-6 flex-grow flex flex-col items-center justify-start pt-24 pb-24">
 
@@ -856,7 +857,7 @@
             <div
                 class="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-black to-transparent pointer-events-none">
             </div>
-        </div> -->
+        </div>
 
         <!-- Competition Page - Trade the Knight -->
         <div id="page-competition" class="page">
@@ -1285,7 +1286,6 @@
                                 <span class="text-3xl md:text-4xl font-bold text-white tracking-tight"
                                     style="display: none;">CITADEL</span>
                             </div>
-                            <p class="text-gray-500 text-sm mt-2">Citadel</p>
                         </a>
                         <a href="https://www.thetadata.net/" target="_blank" rel="noopener noreferrer"
                             class="flex flex-col items-center hover:opacity-80 transition-opacity">
@@ -1295,7 +1295,6 @@
                                 <span class="text-3xl md:text-4xl font-bold text-white tracking-tight"
                                     style="display: none;">THETADATA</span>
                             </div>
-                            <p class="text-gray-500 text-sm mt-2">ThetaData</p>
                         </a>
                     </div>
                 </div>
@@ -1314,7 +1313,6 @@
                                 <span class="text-2xl md:text-3xl font-semibold text-gray-400 tracking-tight"
                                     style="display: none;">OPTIVER</span>
                             </div>
-                            <p class="text-gray-500 text-sm mt-2">Optiver</p>
                         </a>
                     </div>
                 </div>
@@ -1591,6 +1589,8 @@
                 // Update position to mouse coordinates
                 cursor.style.left = e.clientX + 'px';
                 cursor.style.top = e.clientY + 'px';
+                // Show cursor when mouse moves (starts hidden)
+                cursor.style.opacity = '1';
             });
 
             // 2. Add shrink class on mouse down
