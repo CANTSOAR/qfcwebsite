@@ -1658,13 +1658,42 @@
                 return localStorage.getItem('puzzleSolved') === 'true';
             };
 
-            // Initialize puzzle state on page load
+            // Verify puzzle answer
+            const MAX_ATTEMPTS = 3;
+
+            const getAttempts = () => {
+                return parseInt(localStorage.getItem('puzzleAttempts') || '0');
+            };
+
+            const updateAttempts = () => {
+                const attempts = getAttempts() + 1;
+                localStorage.setItem('puzzleAttempts', attempts);
+                return attempts;
+            };
+
+            const lockPuzzle = () => {
+                puzzleAnswer.disabled = true;
+                puzzleSubmit.disabled = true;
+                puzzleSubmit.textContent = 'Locked';
+                puzzleAnswer.placeholder = 'Please sign up for newsletter below';
+                puzzleAnswer.value = '';
+                puzzleError.textContent = 'Maximum attempts reached. Please sign up for the newsletter to continue.';
+                puzzleError.classList.remove('hidden');
+                newsletterSection.classList.add('visible');
+            };
+
             const initPuzzleState = () => {
+                // Check if solved first
                 if (checkPuzzleSolved()) {
-                    // User already solved - show registration, hide puzzle
                     puzzleSection.style.display = 'none';
                     registrationSection.classList.add('visible');
                     newsletterSection.classList.remove('visible');
+                    return;
+                }
+
+                // Check if locked due to too many attempts
+                if (getAttempts() >= MAX_ATTEMPTS) {
+                    lockPuzzle();
                 }
             };
 
@@ -1700,13 +1729,21 @@
                 }
             });
 
-            // Verify puzzle answer
             const verifyAnswer = () => {
+                // Double check lock state securely
+                if (getAttempts() >= MAX_ATTEMPTS) {
+                    lockPuzzle();
+                    return;
+                }
+
                 const userAnswer = puzzleAnswer.value.trim();
 
                 if (userAnswer === CORRECT_ANSWER) {
                     // Correct answer!
                     localStorage.setItem('puzzleSolved', 'true');
+                    // Reset attempts on success
+                    localStorage.removeItem('puzzleAttempts');
+
                     puzzleSection.style.display = 'none';
                     registrationSection.classList.add('visible');
                     newsletterSection.classList.remove('visible');
@@ -1718,14 +1755,22 @@
                     }
                 } else {
                     // Wrong answer
-                    puzzleAnswer.classList.add('error');
-                    puzzleError.classList.remove('hidden');
-                    newsletterSection.classList.add('visible');
+                    const currentAttempts = updateAttempts();
 
-                    // Remove error styling after animation
-                    setTimeout(() => {
-                        puzzleAnswer.classList.remove('error');
-                    }, 400);
+                    if (currentAttempts >= MAX_ATTEMPTS) {
+                        lockPuzzle();
+                    } else {
+                        // Standard wrong answer behavior
+                        puzzleAnswer.classList.add('error');
+                        puzzleError.textContent = `Incorrect answer. ${MAX_ATTEMPTS - currentAttempts} attempts remaining.`;
+                        puzzleError.classList.remove('hidden');
+                        newsletterSection.classList.add('visible');
+
+                        // Remove error styling after animation
+                        setTimeout(() => {
+                            puzzleAnswer.classList.remove('error');
+                        }, 400);
+                    }
                 }
             };
 
