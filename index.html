@@ -1801,141 +1801,95 @@
             let width, height;
             let particles = [];
             let time = 0;
+            const mouse = { x: -1000, y: -1000 };
 
             const config = {
-                particleCount: window.innerWidth < 768 ? 80 : 180, // Fewer on mobile
-                baseSpeed: 0.5,
+                // Grid settings - Higher density
+                rows: 35,
+                cols: 60,
+                spacing: 40, // Space between grid points
+
+                // Visuals
                 colorWhite: 'rgba(255, 255, 255, ',
                 colorRed: 'rgba(204, 0, 51, ', // Rutgers Scarlet
-                depth: 800, // Simulated depth
+
+                // Physics
+                waveSpeed: 0.005,
+                waveAmplitude: 60,
+                mouseRadius: 300,
+                mouseForce: 150, // How much it pulls up
             };
 
             class Particle {
-                constructor() {
-                    this.reset(true);
-                }
+                constructor(row, col) {
+                    this.row = row;
+                    this.col = col;
 
-                reset(initial = false) {
-                    this.x = Math.random() * width;
-                    // Spread y more at the bottom, less at top to simulate horizon
-                    this.y = Math.random() * height;
-                    this.z = Math.random() * config.depth; // Depth: 0 (close) to 800 (far)
+                    // 3D Coordinates
+                    this.x = (col - config.cols / 2) * config.spacing;
+                    this.z = (row - config.rows / 2) * config.spacing;
+                    this.y = 0;
+                    this.baseY = 0;
 
-                    // Initial random phase for wave
+                    this.isRed = Math.random() < 0.35;
+                    this.baseSize = Math.random() * 2 + 1.5;
                     this.phase = Math.random() * Math.PI * 2;
-
-                    // Speed depends on depth (parallax)
-                    this.speed = (1 - this.z / config.depth) * config.baseSpeed + 0.2;
-
-                    // Color: 20% Red, 80% White
-                    this.isRed = Math.random() < 0.2;
-
-                    // Size depends on depth
-                    this.baseSize = Math.random() * 2 + 1;
-
-                    if (!initial) {
-                        // If resetting, start from left or right? 
-                        // Let's just flow seamlessly. If reset, maybe start off screen?
-                        // No, for this visual, wrapping around is fine.
-                        this.x = Math.random() * width;
-                        this.y = Math.random() * height;
-                    }
                 }
 
-                update() {
-                    // Move across screen
-                    this.x += this.speed;
+                update(time) {
+                    const distanceFromCenterX = Math.abs(this.x) / (config.cols * config.spacing / 2);
+                    const smile = Math.pow(distanceFromCenterX, 2) * 50;
 
-                    // Wrap around horizontal
-                    if (this.x > width) {
-                        this.x = -10;
-                    }
+                    const wave = Math.sin(this.x * 0.01 + time) * Math.cos(this.z * 0.01 + time) * 20;
 
-                    // Wave motion equation (Volatility Surface-ish shape)
-                    // z = x^2 - y^2 (saddle) or simple sine waves
-                    // Let's do a flowing wave that changes with time
-
-                    // Normalized coordinates (-1 to 1)
-                    const nx = (this.x / width) * 2 - 1;
-                    const ny = (this.y / height) * 2 - 1;
-
-                    // Volatility Smile shape: curvature increases at edges
-                    const smile = Math.pow(nx, 2) * 50;
-
-                    // Time-based wave
-                    const wave = Math.sin(this.x * 0.005 + time * 0.5 + this.phase) * 20;
-
-                    // Apply to Y (screen Y)
-                    // We want them to sit at the bottom, so base Y should be low
-                    // But we want a "surface" feel. 
-                    // Let's make them flow in a specific band at the bottom half
-
-                    // Re-think: User wants "sit in the background (along the bottom)"
-                    // So we shouldn't fill the whole screen randomly.
-                    // Let's target the bottom 40% of the screen.
+                    this.y = this.baseY - smile + wave;
                 }
 
-                // Optimized update for bottom-flowing surface
-                updateSurface() {
-                    this.x += this.speed;
-                    if (this.x > width) {
-                        this.x = -10;
+                draw(time) {
+                    this.update(time);
+
+                    const fov = 800;
+                    const cameraY = -300;
+                    const cameraZ = 800;
+
+                    const px = this.x;
+                    const py = this.y + cameraY;
+                    const pz = this.z + cameraZ;
+
+                    if (pz <= 0) return;
+
+                    const scale = fov / pz;
+                    const screenX = px * scale + width / 2;
+                    const screenY = py * scale + height / 2 + 150;
+
+                    const dx = mouse.x - screenX;
+                    const dy = mouse.y - screenY;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    let interactY = 0;
+                    if (dist < config.mouseRadius) {
+                        const force = (1 - dist / config.mouseRadius) * config.mouseForce;
+                        interactY = -force;
                     }
 
-                    // Base position is biased towards bottom
-                    // We want a surface that looks like a grid or point cloud
+                    const finalScreenY = screenY + interactY;
 
-                    // Simple flow:
-                    // Y = BoxHeight - (SimulatedHeight)
-
-                    // Let's use the random Y from init but squash it into the bottom
-                    const normalizedZ = this.z / config.depth; // 0 to 1
-
-                    // Perspective transform
-                    const perspective = 1 - normalizedZ;
-
-                    // Wave calculation
-                    const waveX = Math.sin(this.x * 0.003 + time * 1 + this.phase) * 30;
-                    const waveZ = Math.cos(this.z * 0.01 + time * 0.5) * 20;
-
-                    // Final drawing position
-                    this.drawX = this.x;
-                    // Center the wave vertically in the bottom section
-                    // Base Y is 80% down the screen
-                    const horizon = height * 0.85;
-
-                    // Offset based on "depth" to create a floor plane effect
-                    // Closer particles are lower, further are higher (or vice versa depending on view)
-                    // Let's say viewpoint is above looking down/forward.
-                    // Further (high z) = Higher on screen (approaching horizon)
-                    // Closer (low z) = Lower on screen
-
-                    const floorY = height * 0.6 + (this.z / config.depth) * (height * 0.4);
-
-                    // Apply wave
-                    this.drawY = floorY + waveX + waveZ;
-
-                    // Size
-                    this.drawSize = this.baseSize * perspective;
-
-                    // Alpha
-                    this.alpha = perspective * 0.7; // Fade out far particles
-                }
-
-                draw() {
                     ctx.beginPath();
-                    ctx.arc(this.drawX, this.drawY, this.drawSize, 0, Math.PI * 2);
+                    const size = this.baseSize * scale;
+                    ctx.arc(screenX, finalScreenY, size, 0, Math.PI * 2);
 
-                    // Color
+                    let alpha = 1;
+                    alpha *= Math.max(0, 1 - (pz / 2500));
+                    // Smooth edge fade
+                    alpha *= Math.min(1, Math.max(0, (pz - 100) / 500));
+
                     const colorPrefix = this.isRed ? config.colorRed : config.colorWhite;
-                    ctx.fillStyle = colorPrefix + this.alpha + ')';
-
+                    ctx.fillStyle = colorPrefix + alpha + ')';
                     ctx.fill();
 
-                    // Optional glow for red particles
                     if (this.isRed) {
-                        ctx.shadowBlur = 10;
-                        ctx.shadowColor = config.colorRed + '0.5)';
+                        ctx.shadowBlur = 15;
+                        ctx.shadowColor = config.colorRed + '0.6)';
                     } else {
                         ctx.shadowBlur = 0;
                     }
@@ -1948,36 +1902,69 @@
                 canvas.width = width;
                 canvas.height = height;
 
-                // Re-init particles on drastic resize?
-                // Just let them flow
+                initParticles();
             };
 
-            const init = () => {
-                resize();
-                for (let i = 0; i < config.particleCount; i++) {
-                    const p = new Particle();
-                    // Distribute Z more evenly
-                    p.z = Math.random() * config.depth;
-                    particles.push(p);
+            const initParticles = () => {
+                particles = [];
+                // Adjust grid size based on screen
+                let cols = config.cols;
+                let rows = config.rows;
+                let spacing = config.spacing;
+
+                if (width < 768) {
+                    cols = 20;
+                    rows = 20;
+                    spacing = 30;
                 }
-                animate();
+
+                // Recalculate centering offsets
+                const offsetX = (cols * spacing) / 2;
+                const offsetZ = (rows * spacing) / 2;
+
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < cols; c++) {
+                        // Pass r,c to constructor but we might overwrite x,z if mobile logic differs from default config
+                        // Actually let's just use the constructor default if not mobile, or update config?
+                        // Easiest is to manually set properties here to match local logic
+                        const p = new Particle(r, c);
+
+                        // Override position based on local cols/rows/spacing
+                        p.x = (c * spacing) - offsetX;
+                        p.z = (r * spacing) - offsetZ;
+
+                        particles.push(p);
+                    }
+                }
             };
 
+            let animateId;
+            let tick = 0;
             const animate = () => {
                 ctx.clearRect(0, 0, width, height);
+                tick += config.waveSpeed;
 
-                time += 0.01;
+                particles.forEach(p => p.draw(tick));
 
-                particles.forEach(p => {
-                    p.updateSurface();
-                    p.draw();
-                });
-
-                requestAnimationFrame(animate);
+                animateId = requestAnimationFrame(animate);
             };
 
             window.addEventListener('resize', resize);
-            init();
+
+            window.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+
+            window.addEventListener('mouseleave', () => {
+                mouse.x = -5000;
+                mouse.y = -5000;
+            });
+
+            // Start
+            resize(); // calls initParticles
+            animate();
 
         })();
     </script>
