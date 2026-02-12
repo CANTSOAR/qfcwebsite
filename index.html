@@ -153,7 +153,7 @@
         }
 
         #nav-overlay {
-            transition: opacity 0.5s ease;
+            transition: opacity 1s ease;
         }
 
         #nav-overlay.open {
@@ -619,7 +619,7 @@
     <div id="content-wrapper" class="relative w-full overflow-y-auto">
 
         <!-- Home Page -->
-        <div id="page-home" class="page active relative overflow-hidden min-h-screen">
+        <div id="page-home" class="page active relative overflow-hidden h-full">
             <canvas id="volatility-surface"
                 class="absolute top-0 left-0 w-full h-full pointer-events-none z-0 opacity-60"></canvas>
             <main
@@ -1386,7 +1386,7 @@
         </div>
 
         <!-- Footer for all pages -->
-        <footer class="absolute bottom-0 left-0 right-0 py-4 bg-[#0A0A0A]">
+        <footer class="fixed bottom-0 left-0 right-0 py-4 bg-[#0A0A0A] z-40">
             <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-gray-500 text-sm order-2 md:order-1 mt-4 md:mt-0 text-center hidden md:block">&copy; 2026
                     Rutgers Quantitative Finance Club. All Rights Reserved.</p>
@@ -1521,12 +1521,14 @@
                         return;
                     }
 
-                    // Close the menu
-                    navOverlay.classList.remove('open');
-                    body.classList.remove('menu-open');
-
-                    // Navigate to the page (this also updates URL and active states)
+                    // Switch the page behind the still-visible menu overlay
                     navigateToPage(targetPageId);
+
+                    // Delay the menu fade-out so the page transition is hidden
+                    setTimeout(() => {
+                        navOverlay.classList.remove('open');
+                        body.classList.remove('menu-open');
+                    }, 300);
                 });
             });
 
@@ -1818,7 +1820,7 @@
                 // Wave height (was 20)
                 waveAmplitude: 20,
                 // Smile curve strength (was 75)
-                smileStrength: 300,
+                smileStrength: 100,
 
                 // --- INTERACTION ---
                 mouseRadius: 500,
@@ -1826,7 +1828,7 @@
 
                 // --- VIEWPORT ---
                 // Vertical offset: Negative moves UP, Positive moves DOWN
-                verticalOffset: 200,
+                verticalOffset: window.innerWidth < 768 ? 50 : 200,
                 // Camera height: More negative = Higher camera (looking down)
                 cameraHeight: 200,
 
@@ -1914,6 +1916,9 @@
                 height = window.innerHeight;
                 canvas.width = width;
                 canvas.height = height;
+
+                // Update vertical offset for mobile vs desktop
+                config.verticalOffset = width < 768 ? 50 : 200;
 
                 initParticles();
             };
