@@ -25,16 +25,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Inject secrets into HTML
-        env:
-          PUZZLE_ANSWER: ${{ secrets.PUZZLE_ANSWER }}
-          NEWSLETTER_FORM_ID: ${{ secrets.NEWSLETTER_FORM_ID }}
-        run: |
-          # Base64 encode and inject secrets
-          ENCODED_ANSWER=$(printf '%s' "${PUZZLE_ANSWER}" | base64 -w 0)
-          sed -i "s|__PUZZLE_ANSWER_BASE64__|${ENCODED_ANSWER}|g" index.html
-          sed -i "s|__NEWSLETTER_FORM_ID__|${NEWSLETTER_FORM_ID}|g" index.html
-          echo "✅ Build complete"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
