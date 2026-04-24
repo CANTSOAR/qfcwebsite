@@ -1599,27 +1599,27 @@
             
             <div class="max-w-4xl w-full">
                 <!-- Title -->
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter mb-8 text-center" style="color: var(--text-color);">Trade the Knight</h1>
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter mb-8 text-center" style="color: var(--text-color);">Knight T-Shirt</h1>
                 
                 <div class="section-card p-8 md:p-12 rounded-lg mb-8 shadow-2xl relative overflow-hidden" style="border-color: var(--card-border);">
                     <div class="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent pointer-events-none"></div>
                     
                     <h2 class="text-2xl md:text-3xl font-bold mb-4 border-b pb-2 inline-block border-red-500/50">Puzzle Overview</h2>
-                    <p class="mb-8 fluid-body" style="color: var(--soft-text);">The "Trade the Knight" challenge is a 5x5 graph traversal problem designed to test algorithmic pathfinding and optimization. Competitors must navigate a grid of mathematical operations using only legal chess Knight moves to maximize their final score.</p>
+                    <p class="mb-8 fluid-body" style="color: var(--soft-text);">The t-shirt challenge is a 5x5 graph traversal problem.</p>
                     
                     <h2 class="text-2xl md:text-3xl font-bold mb-4 border-b pb-2 inline-block border-red-500/50">The Rules</h2>
                     <ul class="list-disc pl-6 space-y-3 mb-8 fluid-body marker:text-red-500" style="color: var(--soft-text);">
                         <li><strong style="color: var(--text-color);">The Starting State:</strong> You begin on the center square (the Knight) with a starting value of <strong class="text-red-500 text-lg">1</strong>.</li>
                         <li><strong style="color: var(--text-color);">The Movement:</strong> You may only move in an "L-shape," identical to a legal Knight's move in chess (two squares in one direction, then one square perpendicular).</li>
-                        <li><strong style="color: var(--text-color);">No Repeats:</strong> You must visit every single square on the 5x5 board exactly once. You cannot land on the same square twice.</li>
-                        <li><strong style="color: var(--text-color);">The Objective:</strong> Apply the mathematical operation in each cell to your running total as you land on it. Find the specific 25-square path that results in the <strong class="text-red-500">maximum possible final value</strong>.</li>
+                        <li><strong style="color: var(--text-color);">No Repeats:</strong> You cannot land on the same square twice. Continue until you have no legal moves left.</li>
+                        <li><strong style="color: var(--text-color);">The Objective:</strong> Apply the mathematical operation in each cell to your running total as you land on it. Find the path that results in the <strong class="text-red-500">maximum possible final value</strong>.</li>
                     </ul>
 
                     <h2 class="text-2xl md:text-3xl font-bold mb-4 border-b pb-2 inline-block border-red-500/50">Hints</h2>
                     <ul class="list-disc pl-6 space-y-4 mb-10 fluid-body marker:text-yellow-500" style="color: var(--soft-text);">
-                        <li><strong style="color: var(--text-color);">Hint 1:</strong> Greed isn't always good. Sometimes a dive into the negatives early on is exactly what you need to align for a massive multiplier later.</li>
-                        <li><strong style="color: var(--text-color);">Hint 2:</strong> Work backwards. Since the goal is the absolute maximum, you likely want your running total to be acted upon by the most impactful operations near the very end of your tour.</li>
-                        <li><strong style="color: var(--text-color);">Hint 3:</strong> You must visit every square, which means you cannot completely avoid negative multipliers. The trick is to ensure your running total is already negative when you hit them!</li>
+                        <li><strong style="color: var(--text-color);">Hint 1:</strong> Greed isn't always good.</li>
+                        <li><strong style="color: var(--text-color);">Hint 2:</strong> Work backwards.</li>
+                        <li><strong style="color: var(--text-color);">Hint 3:</strong> Surely you can hit every square.</li>
                     </ul>
                     
                     <div class="mt-12 relative z-20 w-full flex justify-center min-h-[400px]">
