@@ -322,6 +322,11 @@
             transition-delay: 1.1s, 1.1s, 0s;
         }
 
+        
+        #nav-overlay.open #vertical-menu .menu-link:nth-child(8) {
+            transition-delay: 1.2s, 1.2s, 0s;
+        }
+
         /* Faint background logo in menu */
         #menu-background-logo {
             position: absolute;
@@ -539,7 +544,7 @@
     <!-- Navigation Trigger -->
     <button id="nav-trigger"
         class="fixed top-6 left-6 md:top-8 md:left-8 z-[60] w-12 h-12 md:w-12 md:h-12 bg-black flex items-center justify-center border-2 border-gray-800 focus:outline-none">
-        <div id="inner-logo" class="w-full h-full items-center justify-center">
+        <div id="inner-logo" class="w-full h-full flex items-center justify-center">
             <img src="logos/logo_black.png" alt="QFC Logo Small" class="w-12 h-12 invert-dark">
         </div>
     </button>
@@ -563,6 +568,7 @@
             <a href="#" class="menu-link text-4xl font-bold" data-page="competition">Competition</a>
             <a href="#" class="menu-link text-4xl font-bold" data-page="research">Research</a>
             <a href="#" class="menu-link text-4xl font-bold" data-page="join">Sponsors</a>
+        <a href="#" class="menu-link text-4xl font-bold" data-page="knight">Knight</a>
         </nav>
     </div>
 
@@ -1584,6 +1590,45 @@
                 </div>
 
             </main>
+        </div>
+
+        
+        <!-- Knight Page -->
+        <div id="page-knight" class="page">
+            <main class="container mx-auto px-6 flex-grow flex flex-col items-center pt-[15vh] pb-24">
+            
+            <div class="max-w-4xl w-full">
+                <!-- Title -->
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter mb-8 text-center" style="color: var(--text-color);">Trade the Knight</h1>
+                
+                <div class="section-card p-8 md:p-12 rounded-lg mb-8 shadow-2xl relative overflow-hidden" style="border-color: var(--card-border);">
+                    <div class="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent pointer-events-none"></div>
+                    
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 border-b pb-2 inline-block border-red-500/50">Puzzle Overview</h2>
+                    <p class="mb-8 fluid-body" style="color: var(--soft-text);">The "Trade the Knight" challenge is a 5x5 graph traversal problem designed to test algorithmic pathfinding and optimization. Competitors must navigate a grid of mathematical operations using only legal chess Knight moves to maximize their final score.</p>
+                    
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 border-b pb-2 inline-block border-red-500/50">The Rules</h2>
+                    <ul class="list-disc pl-6 space-y-3 mb-8 fluid-body marker:text-red-500" style="color: var(--soft-text);">
+                        <li><strong style="color: var(--text-color);">The Starting State:</strong> You begin on the center square (the Knight) with a starting value of <strong class="text-red-500 text-lg">1</strong>.</li>
+                        <li><strong style="color: var(--text-color);">The Movement:</strong> You may only move in an "L-shape," identical to a legal Knight's move in chess (two squares in one direction, then one square perpendicular).</li>
+                        <li><strong style="color: var(--text-color);">No Repeats:</strong> You must visit every single square on the 5x5 board exactly once. You cannot land on the same square twice.</li>
+                        <li><strong style="color: var(--text-color);">The Objective:</strong> Apply the mathematical operation in each cell to your running total as you land on it. Find the specific 25-square path that results in the <strong class="text-red-500">maximum possible final value</strong>.</li>
+                    </ul>
+
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 border-b pb-2 inline-block border-red-500/50">Hints</h2>
+                    <ul class="list-disc pl-6 space-y-4 mb-10 fluid-body marker:text-yellow-500" style="color: var(--soft-text);">
+                        <li><strong style="color: var(--text-color);">Hint 1:</strong> Greed isn't always good. Sometimes a dive into the negatives early on is exactly what you need to align for a massive multiplier later.</li>
+                        <li><strong style="color: var(--text-color);">Hint 2:</strong> Work backwards. Since the goal is the absolute maximum, you likely want your running total to be acted upon by the most impactful operations near the very end of your tour.</li>
+                        <li><strong style="color: var(--text-color);">Hint 3:</strong> You must visit every square, which means you cannot completely avoid negative multipliers. The trick is to ensure your running total is already negative when you hit them!</li>
+                    </ul>
+                    
+                    <div class="mt-12 relative z-20 w-full flex justify-center min-h-[400px]">
+                        <iframe data-tally-src="https://tally.so/embed/eqNRrq?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="400" frameborder="0" marginheight="0" marginwidth="0" title="Trade the Knight Submission"></iframe><script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
         </div>
 
         <!-- Footer for all pages -->
